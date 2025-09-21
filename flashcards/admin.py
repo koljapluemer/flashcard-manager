@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 from simple_history.admin import SimpleHistoryAdmin
-from .models import Flashcard
+from .models import Flashcard, FlashcardCollection
 
 
 @admin.register(Flashcard)
@@ -18,3 +18,15 @@ class FlashcardAdmin(SummernoteModelAdmin, SimpleHistoryAdmin):
     def back_preview(self, obj):
         return obj.back[:50] + '...' if len(obj.back) > 50 else obj.back
     back_preview.short_description = 'Back'
+
+
+@admin.register(FlashcardCollection)
+class FlashcardCollectionAdmin(SimpleHistoryAdmin):
+    list_display = ['title', 'flashcard_count', 'created_at']
+    list_filter = ['created_at', 'updated_at']
+    search_fields = ['title', 'description']
+    filter_horizontal = ['flashcards']
+
+    def flashcard_count(self, obj):
+        return obj.flashcards.count()
+    flashcard_count.short_description = 'Flashcards'

@@ -2,15 +2,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from .models import FlashcardCollection
-from .forms import FlashcardCollectionForm
-from .utils import generate_pdf
+from ..models import FlashcardCollection
+from ..collection_forms import FlashcardCollectionForm
+from ..utils import generate_pdf
 
 
 @login_required
 def collection_list(request):
     collections = FlashcardCollection.objects.all().order_by('-created_at')
-    return render(request, 'collections/list.html', {'collections': collections})
+    return render(request, 'flashcards/collections/list.html', {'collections': collections})
 
 
 @login_required
@@ -23,7 +23,7 @@ def collection_create(request):
             return redirect('collection_list')
     else:
         form = FlashcardCollectionForm()
-    return render(request, 'collections/form.html', {'form': form, 'title': 'Create Collection'})
+    return render(request, 'flashcards/collections/form.html', {'form': form, 'title': 'Create Collection'})
 
 
 @login_required
@@ -37,7 +37,7 @@ def collection_edit(request, pk):
             return redirect('collection_list')
     else:
         form = FlashcardCollectionForm(instance=collection)
-    return render(request, 'collections/form.html', {'form': form, 'title': 'Edit Collection'})
+    return render(request, 'flashcards/collections/form.html', {'form': form, 'title': 'Edit Collection'})
 
 
 @login_required
@@ -47,20 +47,20 @@ def collection_delete(request, pk):
         collection.delete()
         messages.success(request, 'Collection deleted successfully.')
         return redirect('collection_list')
-    return render(request, 'collections/delete.html', {'collection': collection})
+    return render(request, 'flashcards/collections/delete.html', {'collection': collection})
 
 
 @login_required
 def collection_detail(request, pk):
     collection = get_object_or_404(FlashcardCollection, pk=pk)
-    return render(request, 'collections/detail.html', {'collection': collection})
+    return render(request, 'flashcards/collections/detail.html', {'collection': collection})
 
 
 @login_required
 def collection_history(request, pk):
     collection = get_object_or_404(FlashcardCollection, pk=pk)
     history = collection.history.all()
-    return render(request, 'collections/history.html', {'collection': collection, 'history': history})
+    return render(request, 'flashcards/collections/history.html', {'collection': collection, 'history': history})
 
 
 @login_required

@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django_summernote',
     'accounts',
     'flashcards',
-    'flashcard_collections',
 ]
 
 MIDDLEWARE = [

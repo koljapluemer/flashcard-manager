@@ -8,7 +8,7 @@ def generate_pdf(collection):
     flashcards = list(collection.flashcards.all())
 
     # Render HTML template with flashcard data
-    html_content = render_to_string('collections/flashcard_pdf.html', {
+    html_content = render_to_string('flashcards/collections/flashcard_pdf.html', {
         'collection': collection,
         'flashcards': flashcards
     })

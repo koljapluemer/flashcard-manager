@@ -24,7 +24,6 @@ urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('', include('accounts.urls')),
     path('flashcards/', include('flashcards.urls')),
-    path('collections/', include('flashcard_collections.urls')),
 ]
 
 if settings.DEBUG:
