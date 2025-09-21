@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Flashcard Manager{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">{{ title }}</h1>
+        <a href="{% url 'collection_list' %}" class="btn btn-ghost">Back to List</a>
+    </div>
+
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text text-lg font-semibold">Title</span>
+            </label>
+            {{ form.title }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text text-lg font-semibold">Description</span>
+            </label>
+            {{ form.description }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text text-lg font-semibold">Flashcards</span>
+            </label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto p-4 border border-base-300 rounded-lg">
+                {% for choice in form.flashcards %}
+                    <div class="form-control">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            {{ choice.tag }}
+                            <div class="flex-1">
+                                <div class="text-sm font-medium">{{ choice.choice_label|truncatewords:5|safe }}</div>
+                                <div class="text-xs opacity-60">ID: {{ choice.data.value }}</div>
+                            </div>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex gap-4">
+            <button type="submit" class="btn btn-primary">Save Collection</button>
+            <a href="{% url 'collection_list' %}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero min-h-96">
+    <div class="hero-content text-center">
+        <div class="max-w-md">
+            <h1 class="text-5xl font-bold">Flashcard Manager</h1>
+            <p class="py-6">Create, organize, and manage your flashcards efficiently.</p>
+            <div class="flex gap-4 justify-center">
+                <a href="{% url 'flashcard_list' %}" class="btn btn-primary">View Flashcards</a>
+                <a href="{% url 'collection_list' %}" class="btn btn-outline">View Collections</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ collection.title }} - Flashcard Manager{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">{{ collection.title }}</h1>
+        <div class="flex gap-2">
+            <a href="{% url 'collection_pdf' collection.pk %}" class="btn btn-success">Download PDF</a>
+            <a href="{% url 'collection_edit' collection.pk %}" class="btn btn-outline">Edit</a>
+            <a href="{% url 'collection_list' %}" class="btn btn-ghost">Back to List</a>
+        </div>
+    </div>
+
+    {% if collection.description %}
+        <div class="bg-base-200 p-4 rounded-lg mb-6">
+            <p>{{ collection.description }}</p>
+        </div>
+    {% endif %}
+
+    <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-4">
+            Flashcards ({{ collection.flashcards.count }})
+        </h2>
+
+        {% if collection.flashcards.exists %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for flashcard in collection.flashcards.all %}
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-sm mb-2">Front:</h4>
+                            <div class="text-sm bg-base-100 p-3 rounded">{{ flashcard.front|safe|truncatewords:15 }}</div>
+                        </div>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-sm mb-2">Back:</h4>
+                            <div class="text-sm bg-base-100 p-3 rounded">{{ flashcard.back|safe|truncatewords:15 }}</div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <a href="{% url 'flashcard_edit' flashcard.pk %}" class="btn btn-xs btn-outline">Edit</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-8">
+                <p class="text-lg">No flashcards in this collection.</p>
+                <a href="{% url 'collection_edit' collection.pk %}" class="btn btn-primary mt-4">Add Flashcards</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="text-center">
+        <a href="{% url 'collection_history' collection.pk %}" class="btn btn-ghost">View Change History</a>
+    </div>
+</div>
+{% endblock %}

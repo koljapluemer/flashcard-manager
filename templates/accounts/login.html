@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Flashcard Manager{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-96">
+    <div class="card w-96 bg-base-200 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title justify-center mb-4">Login</h2>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Email</span>
+                    </label>
+                    <input type="email" name="username" class="input input-bordered w-full" required>
+                </div>
+
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Password</span>
+                    </label>
+                    <input type="password" name="password" class="input input-bordered w-full" required>
+                </div>
+
+                {% if form.errors %}
+                    <div class="alert alert-error mt-4">
+                        Invalid email or password.
+                    </div>
+                {% endif %}
+
+                <div class="card-actions justify-center mt-6">
+                    <button type="submit" class="btn btn-primary w-full">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
