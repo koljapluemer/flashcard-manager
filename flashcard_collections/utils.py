@@ -18,7 +18,7 @@ def clean_html(html_text):
 
 
 def generate_pdf(collection):
-    """Generate business card sized PDF for flashcards in collection"""
+    """Generate business card sized PDF for flashcards - proper front/back layout for printing"""
     buffer = BytesIO()
 
     # Business card size: 3.5" x 2" (standard US business card)
@@ -26,49 +26,38 @@ def generate_pdf(collection):
     card_height = 2 * inch
 
     doc = SimpleDocTemplate(buffer, pagesize=(card_width, card_height),
-                           topMargin=0.1*inch, bottomMargin=0.1*inch,
-                           leftMargin=0.1*inch, rightMargin=0.1*inch)
+                           topMargin=0.15*inch, bottomMargin=0.15*inch,
+                           leftMargin=0.15*inch, rightMargin=0.15*inch)
 
     styles = getSampleStyleSheet()
 
-    # Custom styles for business card sized content
-    front_style = ParagraphStyle(
-        'Front',
+    # Custom style for flashcard content
+    card_style = ParagraphStyle(
+        'Card',
         parent=styles['Normal'],
-        fontSize=8,
+        fontSize=10,
         alignment=TA_CENTER,
-        spaceAfter=0.05*inch,
-        leading=10
-    )
-
-    back_style = ParagraphStyle(
-        'Back',
-        parent=styles['Normal'],
-        fontSize=8,
-        alignment=TA_CENTER,
-        leading=10
+        spaceAfter=0,
+        leading=12,
+        wordWrap='CJK'
     )
 
     story = []
+    flashcards = list(collection.flashcards.all())
 
-    for flashcard in collection.flashcards.all():
-        # Front of card
+    for flashcard in flashcards:
+        # FRONT of flashcard (odd page)
         front_text = clean_html(flashcard.front)
-        story.append(Paragraph(f"<b>Front:</b>", front_style))
-        story.append(Paragraph(front_text, front_style))
-        story.append(Spacer(1, 0.1*inch))
-
-        # Back of card
-        back_text = clean_html(flashcard.back)
-        story.append(Paragraph(f"<b>Back:</b>", back_style))
-        story.append(Paragraph(back_text, back_style))
-
-        # Page break for next card
+        story.append(Paragraph(front_text, card_style))
         story.append(PageBreak())
 
-    # Remove last page break
-    if story and isinstance(story[-1], PageBreak):
-        story.pop()
+        # BACK of flashcard (even page - will be on reverse when printed duplex)
+        back_text = clean_html(flashcard.back)
+        story.append(Paragraph(back_text, card_style))
+
+        # Add page break unless this is the last card
+        if flashcard != flashcards[-1]:
+            story.append(PageBreak())
 
     doc.build(story)
     buffer.seek(0)
