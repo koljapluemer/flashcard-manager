@@ -12,7 +12,8 @@ from .collection_views import (
     collection_delete,
     collection_detail,
     collection_history,
-    collection_pdf
+    collection_pdf,
+    collection_practice
 )
 from .csv_upload import collection_upload_csv
 
@@ -29,5 +30,6 @@ __all__ = [
     'collection_detail',
     'collection_history',
     'collection_pdf',
+    'collection_practice',
     'collection_upload_csv'
 ]

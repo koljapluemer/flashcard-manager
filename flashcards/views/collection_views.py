@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from ..models import FlashcardCollection
 from ..collection_forms import FlashcardCollectionForm
 from ..utils import generate_pdf
@@ -72,3 +72,26 @@ def collection_pdf(request, pk):
     pdf_content = generate_pdf(collection)
     response.write(pdf_content)
     return response
+
+
+def collection_practice(request, pk):
+    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    flashcards = collection.flashcards.all()
+
+    if not flashcards:
+        raise Http404("This collection has no flashcards.")
+
+    flashcard_data = [
+        {
+            'front': flashcard.front,
+            'back': flashcard.back
+        }
+        for flashcard in flashcards
+    ]
+
+    context = {
+        'collection': collection,
+        'flashcard_data': flashcard_data,
+    }
+
+    return render(request, 'flashcards/collections/practice.html', context)

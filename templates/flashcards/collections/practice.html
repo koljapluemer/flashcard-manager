@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice: {{ collection.title|escape }}</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .progress {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .flashcard {
+            border: 2px solid #3498db;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            background-color: #fff;
+            min-height: 150px;
+        }
+
+        .flashcard-front {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .flashcard-back {
+            font-size: 16px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .completion-message {
+            text-align: center;
+            font-size: 18px;
+            color: #27ae60;
+            display: none;
+        }
+
+        .restart-section {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ collection.title|escape }}</h1>
+            <p>Practice Session</p>
+        </div>
+
+        <div class="progress">
+            <span id="current-card">1</span> of <span id="total-cards">{{ flashcard_data|length }}</span>
+        </div>
+
+        <div class="flashcard" id="flashcard-container">
+            <div class="flashcard-front" id="flashcard-front">
+                Loading...
+            </div>
+            <div class="flashcard-back" id="flashcard-back">
+                Loading...
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="reveal-btn" onclick="revealAnswer()">Reveal Answer</button>
+            <button class="btn btn-secondary" id="next-btn" onclick="nextCard()" style="display: none;">Next Card</button>
+        </div>
+
+        <div class="completion-message" id="completion-message">
+            <h2>Great job! You've completed all flashcards.</h2>
+        </div>
+
+        <div class="restart-section" id="restart-section">
+            <button class="btn" onclick="restartPractice()">Practice Again</button>
+        </div>
+    </div>
+
+    {{ flashcard_data|json_script:"flashcard-data" }}
+
+    <script type="text/javascript">
+        var flashcards = JSON.parse(document.getElementById('flashcard-data').textContent);
+        var currentCardIndex = 0;
+        var shuffledCards = [];
+        var isAnswerRevealed = false;
+
+        function shuffleArray(array) {
+            var shuffled = array.slice();
+            for (var i = shuffled.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = shuffled[i];
+                shuffled[i] = shuffled[j];
+                shuffled[j] = temp;
+            }
+            return shuffled;
+        }
+
+        function initializePractice() {
+            shuffledCards = shuffleArray(flashcards);
+            currentCardIndex = 0;
+            isAnswerRevealed = false;
+
+            document.getElementById('total-cards').textContent = shuffledCards.length;
+            document.getElementById('completion-message').style.display = 'none';
+            document.getElementById('restart-section').style.display = 'none';
+
+            showCurrentCard();
+        }
+
+        function showCurrentCard() {
+            if (currentCardIndex >= shuffledCards.length) {
+                showCompletion();
+                return;
+            }
+
+            var card = shuffledCards[currentCardIndex];
+
+            document.getElementById('current-card').textContent = currentCardIndex + 1;
+            document.getElementById('flashcard-front').innerHTML = escapeHtml(card.front);
+            document.getElementById('flashcard-back').innerHTML = escapeHtml(card.back);
+            document.getElementById('flashcard-back').style.display = 'none';
+
+            document.getElementById('reveal-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').style.display = 'none';
+
+            isAnswerRevealed = false;
+        }
+
+        function revealAnswer() {
+            document.getElementById('flashcard-back').style.display = 'block';
+            document.getElementById('reveal-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+            isAnswerRevealed = true;
+        }
+
+        function nextCard() {
+            currentCardIndex++;
+            showCurrentCard();
+        }
+
+        function showCompletion() {
+            document.getElementById('flashcard-container').style.display = 'none';
+            document.getElementById('controls').style.display = 'none';
+            document.getElementById('completion-message').style.display = 'block';
+            document.getElementById('restart-section').style.display = 'block';
+        }
+
+        function restartPractice() {
+            document.getElementById('flashcard-container').style.display = 'block';
+            document.getElementById('controls').style.display = 'block';
+            initializePractice();
+        }
+
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(text));
+            return div.innerHTML;
+        }
+
+        // Initialize when page loads
+        if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', initializePractice);
+        } else if (document.attachEvent) {
+            document.attachEvent('onreadystatechange', function() {
+                if (document.readyState === 'complete') {
+                    initializePractice();
+                }
+            });
+        } else {
+            window.onload = initializePractice;
+        }
+    </script>
+</body>
+</html>

@@ -24,6 +24,9 @@
                     {{ collection.flashcards.count }} flashcard{{ collection.flashcards.count|pluralize }}
                 </div>
                 <div class="card-actions justify-end mt-4">
+                    {% if collection.flashcards.exists %}
+                        <a href="{% url 'collection_practice' collection.pk %}" class="btn btn-sm btn-primary" target="_blank">Practice</a>
+                    {% endif %}
                     <div class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="btn btn-sm btn-ghost">⋮</div>
                         <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
@@ -31,6 +34,10 @@
                             <li><a href="{% url 'collection_edit' collection.pk %}">Edit</a></li>
                             <li><a href="{% url 'collection_history' collection.pk %}">History</a></li>
                             <li><a href="{% url 'collection_pdf' collection.pk %}">Download PDF</a></li>
+                            {% if collection.flashcards.exists %}
+                                <li><hr></li>
+                                <li><a href="{% url 'collection_practice' collection.pk %}" target="_blank">Practice</a></li>
+                            {% endif %}
                             <li><hr></li>
                             <li><a href="{% url 'collection_delete' collection.pk %}" class="text-error">Delete</a></li>
                         </ul>
