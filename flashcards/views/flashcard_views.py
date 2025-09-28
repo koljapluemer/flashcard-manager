@@ -8,8 +8,8 @@ from ..forms import FlashcardForm
 
 @login_required
 def flashcard_list(request):
-    flashcards = Flashcard.objects.all().order_by('-created_at')
-    return render(request, 'flashcards/list.html', {'flashcards': flashcards})
+    # Redirect away from all-flashcards view to collections list
+    return redirect('collection_list')
 
 
 @login_required
@@ -19,7 +19,7 @@ def flashcard_create(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Flashcard created successfully.')
-            return redirect('flashcard_list')
+            return redirect('collection_list')
     else:
         form = FlashcardForm()
     return render(request, 'flashcards/form.html', {'form': form, 'title': 'Create Flashcard'})
@@ -33,7 +33,7 @@ def flashcard_edit(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Flashcard updated successfully.')
-            return redirect('flashcard_list')
+            return redirect('collection_list')
     else:
         form = FlashcardForm(instance=flashcard)
     return render(request, 'flashcards/form.html', {'form': form, 'title': 'Edit Flashcard'})
@@ -45,7 +45,7 @@ def flashcard_delete(request, pk):
     if request.method == 'POST':
         flashcard.delete()
         messages.success(request, 'Flashcard deleted successfully.')
-        return redirect('flashcard_list')
+        return redirect('collection_list')
     return render(request, 'flashcards/delete.html', {'flashcard': flashcard})
 
 

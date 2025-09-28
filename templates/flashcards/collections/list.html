@@ -12,40 +12,48 @@
 </div>
 
 {% if collections %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for collection in collections %}
-        <div class="card bg-base-200 shadow-xl">
-            <div class="card-body">
-                <h2 class="card-title">{{ collection.title }}</h2>
-                {% if collection.description %}
-                    <p class="text-sm opacity-70">{{ collection.description|truncatewords:15 }}</p>
-                {% endif %}
-                <div class="text-sm opacity-60">
-                    {{ collection.flashcards.count }} flashcard{{ collection.flashcards.count|pluralize }}
-                </div>
-                <div class="card-actions justify-end mt-4">
-                    {% if collection.flashcards.exists %}
-                        <a href="{% url 'collection_practice' collection.pk %}" class="btn btn-sm btn-primary" target="_blank">Practice</a>
-                    {% endif %}
-                    <div class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="btn btn-sm btn-ghost">⋮</div>
-                        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                            <li><a href="{% url 'collection_detail' collection.pk %}">View</a></li>
-                            <li><a href="{% url 'collection_edit' collection.pk %}">Edit</a></li>
-                            <li><a href="{% url 'collection_history' collection.pk %}">History</a></li>
-                            <li><a href="{% url 'collection_pdf' collection.pk %}">Download PDF</a></li>
-                            {% if collection.flashcards.exists %}
-                                <li><hr></li>
-                                <li><a href="{% url 'collection_practice' collection.pk %}" target="_blank">Practice</a></li>
+    <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Flashcards</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for collection in collections %}
+                <tr>
+                    <td class="font-semibold">
+                        <a href="{% url 'collection_detail' collection.pk %}" class="link link-primary">{{ collection.title }}</a>
+                    </td>
+                    <td class="text-sm opacity-80">
+                        {% if collection.description %}
+                            {{ collection.description|truncatewords:15 }}
+                        {% else %}
+                            <span class="opacity-60">—</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ collection.flashcards.count }}</td>
+                    <td>{{ collection.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="{% url 'collection_detail' collection.pk %}" class="btn btn-xs">View</a>
+                            <a href="{% url 'collection_edit' collection.pk %}" class="btn btn-xs btn-outline">Edit</a>
+                            <a href="{% url 'collection_history' collection.pk %}" class="btn btn-xs btn-ghost">History</a>
+                            <a href="{% url 'collection_pdf' collection.pk %}" class="btn btn-xs btn-success">PDF</a>
+                            {% if collection.flashcards.all|length %}
+                                <a href="{% url 'collection_practice' collection.pk %}" class="btn btn-xs btn-primary" target="_blank">Practice</a>
                             {% endif %}
-                            <li><hr></li>
-                            <li><a href="{% url 'collection_delete' collection.pk %}" class="text-error">Delete</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+                            <a href="{% url 'collection_delete' collection.pk %}" class="btn btn-xs btn-error">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% else %}
     <div class="text-center py-12">

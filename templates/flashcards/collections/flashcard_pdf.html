@@ -6,9 +6,7 @@
         @page {
             size: 3.5in 2in; /* Business card size */
             margin: 0.1in;
-            @bottom-center {
-                content: "";
-            }
+            @bottom-center { content: ""; }
         }
 
         body {
@@ -19,60 +17,12 @@
             line-height: 1.2;
         }
 
-        .flashcard {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: flex-start;
-            justify-content: flex-start;
-            page-break-after: always;
-            box-sizing: border-box;
-            padding: 0.1in;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
+        /* Shared flashcard block styles */
+        {% include 'flashcards/collections/_flashcard_styles.html' %}
 
-        .flashcard:last-child {
-            page-break-after: avoid;
-        }
-
-        .flashcard-content {
-            width: 100%;
-            max-height: 100%;
-            overflow: hidden;
-        }
-
-        /* Preserve Summernote formatting */
-        .flashcard-content p {
-            margin: 0.1em 0;
-        }
-
-        .flashcard-content ul, .flashcard-content ol {
-            margin: 0.2em 0;
-            padding-left: 1em;
-        }
-
-        .flashcard-content li {
-            margin: 0.1em 0;
-        }
-
-        .flashcard-content strong, .flashcard-content b {
-            font-weight: bold;
-        }
-
-        .flashcard-content em, .flashcard-content i {
-            font-style: italic;
-        }
-
-        .flashcard-content u {
-            text-decoration: underline;
-        }
-
-        /* Ensure readability at small size */
-        .flashcard-content h1, .flashcard-content h2, .flashcard-content h3 {
-            font-size: 10pt;
-            margin: 0.2em 0;
-        }
+        /* PDF-specific pagination */
+        .flashcard { page-break-after: always; }
+        .flashcard:last-child { page-break-after: avoid; }
     </style>
 </head>
 <body>
