@@ -21,7 +21,8 @@
     background: var(--card-header-bg-color, #e5e7eb);
     color: var(--card-header-text-color, #111827);
     /* Flush against edges; minimal internal padding */
-    padding: 0.04in 0.06in; 
+    padding: 0.04in 0.06in;
+    margin-bottom: 0.04in; /* Same gap as header's top/bottom padding */
     font-size: 8pt;
     line-height: 1.2;
     font-weight: 600;
@@ -93,10 +94,7 @@
 }
 .flashcard-image-inner img {
     max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain; /* Preserve aspect ratio while fitting container */
+    height: auto; /* Let height scale naturally */
     display: block;
 }
 
