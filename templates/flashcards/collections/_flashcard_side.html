@@ -7,20 +7,28 @@
   <div class="flashcard-content">{{ content|safe }}</div>
 {% elif layout == 'text_left_image_right' %}
   <div class="flashcard-split">
-    <div class="flashcard-cell flashcard-text">{{ content|safe }}</div>
-    <div class="flashcard-cell flashcard-image">
-      {% if image %}
-        <img src="{{ image.url }}" alt="Card image" />
-      {% endif %}
+    <div class="flashcard-cell">
+      <div class="flashcard-text-inner">{{ content|safe }}</div>
+    </div>
+    <div class="flashcard-cell">
+      <div class="flashcard-image-inner">
+        {% if image %}
+          <img src="{{ image.url }}" alt="Card image" />
+        {% endif %}
+      </div>
     </div>
   </div>
 {% else %}
   <div class="flashcard-split">
-    <div class="flashcard-cell flashcard-image">
-      {% if image %}
-        <img src="{{ image.url }}" alt="Card image" />
-      {% endif %}
+    <div class="flashcard-cell">
+      <div class="flashcard-image-inner">
+        {% if image %}
+          <img src="{{ image.url }}" alt="Card image" />
+        {% endif %}
+      </div>
     </div>
-    <div class="flashcard-cell flashcard-text">{{ content|safe }}</div>
+    <div class="flashcard-cell">
+      <div class="flashcard-text-inner">{{ content|safe }}</div>
+    </div>
   </div>
 {% endif %}

@@ -21,7 +21,12 @@
         .image-col { line-height: 0; font-size: 0; }
 
         /* PDF-specific pagination */
-        .flashcard { page-break-after: always; }
+        .flashcard { page-break-after: always; break-inside: avoid; page-break-inside: avoid; }
+        /* In PDF, avoid internal scroll and clipping that can cause splits */
+        .flashcard-content { overflow: hidden; }
+        /* Strongly discourage any internal element from breaking across pages */
+        .flashcard-split, .flashcard-cell, .flashcard-text-inner, .flashcard-image-inner, .flashcard-header,
+        .flashcard-content, img { break-inside: avoid; page-break-inside: avoid; }
         .flashcard:last-child { page-break-after: avoid; }
     </style>
 </head>
