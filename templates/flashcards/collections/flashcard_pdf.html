@@ -9,25 +9,24 @@
             @bottom-center { content: ""; }
         }
 
+        /* Force each flashcard to be exactly one page */
+        .flashcard {
+            page-break-after: always;
+            page-break-inside: avoid;
+            height: 2in !important;
+            max-height: 2in;
+            overflow: hidden;
+        }
+
+        .flashcard:last-child {
+            page-break-after: auto;
+        }
+
         html, body { height: 100%; }
         body { margin: 0; padding: 0; }
 
         /* Shared flashcard block styles */
         {% include 'flashcards/collections/_flashcard_styles.html' %}
-        /* Layout helpers are included from shared styles above */
-        /* PDF-specific overrides to avoid vertical shifting of images */
-        .text-col { overflow: hidden; }
-        .flashcard-content { overflow: hidden; }
-        .image-col { line-height: 0; font-size: 0; }
-
-        /* PDF-specific pagination */
-        .flashcard { page-break-after: always; break-inside: avoid; page-break-inside: avoid; }
-        /* In PDF, avoid internal scroll and clipping that can cause splits */
-        .flashcard-content { overflow: hidden; }
-        /* Strongly discourage any internal element from breaking across pages */
-        .flashcard-split, .flashcard-cell, .flashcard-text-inner, .flashcard-image-inner, .flashcard-header,
-        .flashcard-content, img { break-inside: avoid; page-break-inside: avoid; }
-        .flashcard:last-child { page-break-after: avoid; }
     </style>
 </head>
 <body>
