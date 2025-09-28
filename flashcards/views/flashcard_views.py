@@ -15,7 +15,7 @@ def flashcard_list(request):
 @login_required
 def flashcard_create(request):
     if request.method == 'POST':
-        form = FlashcardForm(request.POST)
+        form = FlashcardForm(request.POST, request.FILES)
         if form.is_valid():
             flashcard = form.save()
             messages.success(request, 'Flashcard created successfully.')
@@ -32,7 +32,7 @@ def flashcard_create(request):
 def flashcard_edit(request, pk):
     flashcard = get_object_or_404(Flashcard, pk=pk)
     if request.method == 'POST':
-        form = FlashcardForm(request.POST, instance=flashcard)
+        form = FlashcardForm(request.POST, request.FILES, instance=flashcard)
         if form.is_valid():
             flashcard = form.save()
             messages.success(request, 'Flashcard updated successfully.')

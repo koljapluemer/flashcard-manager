@@ -16,10 +16,10 @@ class FlashcardCollectionForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'input input-bordered w-full'}),
             'description': forms.Textarea(attrs={'class': 'textarea textarea-bordered w-full', 'rows': 3}),
             'header_text': forms.TextInput(attrs={'class': 'input input-bordered w-full', 'placeholder': 'e.g. Chapter 1: Basics'}),
-            'header_text_color': forms.TextInput(attrs={'type': 'color', 'class': 'input input-bordered w-24 p-1'}),
-            'header_bg_color': forms.TextInput(attrs={'type': 'color', 'class': 'input input-bordered w-24 p-1'}),
-            'card_text_color': forms.TextInput(attrs={'type': 'color', 'class': 'input input-bordered w-24 p-1'}),
-            'card_bg_color': forms.TextInput(attrs={'type': 'color', 'class': 'input input-bordered w-24 p-1'}),
+            'header_text_color': forms.TextInput(attrs={'type': 'color', 'class': 'h-10 w-20 border border-base-300 rounded bg-base-100'}),
+            'header_bg_color': forms.TextInput(attrs={'type': 'color', 'class': 'h-10 w-20 border border-base-300 rounded bg-base-100'}),
+            'card_text_color': forms.TextInput(attrs={'type': 'color', 'class': 'h-10 w-20 border border-base-300 rounded bg-base-100'}),
+            'card_bg_color': forms.TextInput(attrs={'type': 'color', 'class': 'h-10 w-20 border border-base-300 rounded bg-base-100'}),
         }
 
     def __init__(self, *args, **kwargs):

@@ -86,7 +86,7 @@ def collection_pdf(request, pk):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{collection.title}.pdf"'
 
-    pdf_content = generate_pdf(collection)
+    pdf_content = generate_pdf(request, collection)
     response.write(pdf_content)
     return response
 

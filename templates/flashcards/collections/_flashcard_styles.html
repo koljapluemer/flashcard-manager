@@ -9,6 +9,10 @@
     box-sizing: border-box;
     background: var(--card-bg-color, #f7f7f5);
     color: var(--card-text-color, #333333);
+    /* Unify typography across preview and PDF */
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 9pt;
+    line-height: 1.2;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
@@ -30,6 +34,13 @@
     overflow: auto; /* scroll if content exceeds box in web */
     padding: 0.1in; /* keep inch to match PDF scaling */
 }
+
+/* Split layout helpers (table-based; reliable in WeasyPrint and browsers) */
+.flashcard-split { display: table; table-layout: fixed; width: 100%; height: 100%; border-collapse: collapse; }
+.flashcard-cell { display: table-cell; vertical-align: top; width: 50%; }
+.flashcard-text { padding: 0.1in; }
+.flashcard-image { padding: 0.06in; text-align: center; }
+.flashcard-image img { max-width: 100%; max-height: 100%; object-fit: contain; display: inline-block; }
 
 /* Preserve Summernote formatting */
 .flashcard-content p { margin: 0.1em 0; }

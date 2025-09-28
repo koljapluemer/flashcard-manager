@@ -28,31 +28,73 @@
 
         <div class="divider">Card Appearance</div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="form-control">
-                <label class="label"><span class="label-text text-lg font-semibold">Header Text</span></label>
-                {{ form.header_text }}
-                <label class="label"><span class="label-text-alt">Shown in the colored bar at the top (optional)</span></label>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text text-lg font-semibold">Header Text</span></label>
+                    {{ form.header_text }}
+                    <label class="label"><span class="label-text-alt">Shown in a slim colored bar at the top (optional)</span></label>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div class="form-control">
+                        <label class="label"><span class="label-text">Header Text Color</span></label>
+                        {{ form.header_text_color }}
+                    </div>
+                    <div class="form-control">
+                        <label class="label"><span class="label-text">Header Background Color</span></label>
+                        {{ form.header_bg_color }}
+                    </div>
+                    <div class="form-control">
+                        <label class="label"><span class="label-text">Card Text Color</span></label>
+                        {{ form.card_text_color }}
+                    </div>
+                    <div class="form-control">
+                        <label class="label"><span class="label-text">Card Background Color</span></label>
+                        {{ form.card_bg_color }}
+                    </div>
+                </div>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Header Text Color</span></label>
-                    {{ form.header_text_color }}
+            <div>
+                <div class="mb-2 text-sm opacity-70">Live preview</div>
+                <div class="rounded border border-base-300 bg-base-200 p-3 inline-block">
+                    <div class="flashcard-box rounded border border-base-300 shadow-md overflow-hidden"
+                         id="appearance-preview"
+                         style="--card-text-color: {{ form.instance.card_text_color|default:'#333333' }}; --card-bg-color: {{ form.instance.card_bg_color|default:'#f7f7f5' }}; --card-header-bg-color: {{ form.instance.header_bg_color|default:'#e5e7eb' }}; --card-header-text-color: {{ form.instance.header_text_color|default:'#111827' }};">
+                        <div class="flashcard">
+                            <div class="flashcard-header" id="appearance-preview-header">{{ form.instance.header_text }}</div>
+                            <div class="flashcard-content">
+                                <p class="m-0">Lorem ipsum dolor sit amet.</p>
+                                <ul class="m-0"><li>Preview bullet</li></ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Header Background Color</span></label>
-                    {{ form.header_bg_color }}
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Card Text Color</span></label>
-                    {{ form.card_text_color }}
-                </div>
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Card Background Color</span></label>
-                    {{ form.card_bg_color }}
-                </div>
+                <style>
+                    {% include 'flashcards/collections/_flashcard_styles.html' %}
+                    .flashcard-box { width: 3.5in; height: 2in; }
+                </style>
+                <script>
+                    (function() {
+                        const root = document.getElementById('appearance-preview');
+                        const headerEl = document.getElementById('appearance-preview-header');
+                        const hText = document.getElementById('id_header_text');
+                        const hTextColor = document.getElementById('id_header_text_color');
+                        const hBg = document.getElementById('id_header_bg_color');
+                        const cText = document.getElementById('id_card_text_color');
+                        const cBg = document.getElementById('id_card_bg_color');
+                        function apply() {
+                            if (!root) return;
+                            root.style.setProperty('--card-header-text-color', hTextColor.value || '#111827');
+                            root.style.setProperty('--card-header-bg-color', hBg.value || '#e5e7eb');
+                            root.style.setProperty('--card-text-color', cText.value || '#333333');
+                            root.style.setProperty('--card-bg-color', cBg.value || '#f7f7f5');
+                            headerEl.textContent = hText.value || '';
+                            headerEl.style.display = (hText.value || '').trim() ? '' : 'none';
+                        }
+                        [hText, hTextColor, hBg, cText, cBg].forEach(el => el && el.addEventListener('input', apply));
+                        apply();
+                    })();
+                </script>
             </div>
         </div>
 

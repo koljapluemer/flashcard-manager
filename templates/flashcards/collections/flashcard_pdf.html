@@ -5,20 +5,20 @@
     <style>
         @page {
             size: 3.5in 2in; /* Business card size */
-            margin: 0.1in;
+            margin: 0; /* No outer page margin so card is flush */
             @bottom-center { content: ""; }
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            font-size: 9pt;
-            line-height: 1.2;
-        }
+        html, body { height: 100%; }
+        body { margin: 0; padding: 0; }
 
         /* Shared flashcard block styles */
         {% include 'flashcards/collections/_flashcard_styles.html' %}
+        /* Layout helpers are included from shared styles above */
+        /* PDF-specific overrides to avoid vertical shifting of images */
+        .text-col { overflow: hidden; }
+        .flashcard-content { overflow: hidden; }
+        .image-col { line-height: 0; font-size: 0; }
 
         /* PDF-specific pagination */
         .flashcard { page-break-after: always; }
@@ -38,22 +38,12 @@
     {% for flashcard in flashcards %}
         <!-- Front of flashcard -->
         <div class="flashcard">
-            {% if collection.header_text %}
-            <div class="flashcard-header">{{ collection.header_text }}</div>
-            {% endif %}
-            <div class="flashcard-content">
-                {{ flashcard.front|safe }}
-            </div>
+            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.front_layout image=flashcard.front_image content=flashcard.front %}
         </div>
 
         <!-- Back of flashcard -->
         <div class="flashcard">
-            {% if collection.header_text %}
-            <div class="flashcard-header">{{ collection.header_text }}</div>
-            {% endif %}
-            <div class="flashcard-content">
-                {{ flashcard.back|safe }}
-            </div>
+            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.back_layout image=flashcard.back_image content=flashcard.back %}
         </div>
     {% endfor %}
 </body>

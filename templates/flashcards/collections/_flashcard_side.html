@@ -1,0 +1,26 @@
+{# Renders the inside of a single flashcard (header + layout) #}
+{% if header_text %}
+  <div class="flashcard-header">{{ header_text }}</div>
+{% endif %}
+
+{% if layout == 'text_only' %}
+  <div class="flashcard-content">{{ content|safe }}</div>
+{% elif layout == 'text_left_image_right' %}
+  <div class="flashcard-split">
+    <div class="flashcard-cell flashcard-text">{{ content|safe }}</div>
+    <div class="flashcard-cell flashcard-image">
+      {% if image %}
+        <img src="{{ image.url }}" alt="Card image" />
+      {% endif %}
+    </div>
+  </div>
+{% else %}
+  <div class="flashcard-split">
+    <div class="flashcard-cell flashcard-image">
+      {% if image %}
+        <img src="{{ image.url }}" alt="Card image" />
+      {% endif %}
+    </div>
+    <div class="flashcard-cell flashcard-text">{{ content|safe }}</div>
+  </div>
+{% endif %}

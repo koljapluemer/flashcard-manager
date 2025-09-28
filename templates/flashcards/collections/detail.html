@@ -75,18 +75,12 @@
                                      style="--card-text-color: {{ collection.card_text_color }}; --card-bg-color: {{ collection.card_bg_color }}; --card-header-bg-color: {{ collection.header_bg_color }}; --card-header-text-color: {{ collection.header_text_color }};">
                                     <div class="flashcard-box bg-base-200 rounded border border-base-300 shadow-md overflow-hidden">
                                         <div class="flashcard">
-                                            {% if collection.header_text %}
-                                                <div class="flashcard-header">{{ collection.header_text }}</div>
-                                            {% endif %}
-                                            <div class="flashcard-content">{{ flashcard.front|safe }}</div>
+                                            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.front_layout image=flashcard.front_image content=flashcard.front %}
                                         </div>
                                     </div>
                                     <div class="flashcard-box bg-base-200 rounded border border-base-300 shadow-md overflow-hidden">
                                         <div class="flashcard">
-                                            {% if collection.header_text %}
-                                                <div class="flashcard-header">{{ collection.header_text }}</div>
-                                            {% endif %}
-                                            <div class="flashcard-content">{{ flashcard.back|safe }}</div>
+                                            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.back_layout image=flashcard.back_image content=flashcard.back %}
                                         </div>
                                     </div>
                                 </div>

@@ -9,7 +9,7 @@
         <a href="{% url 'collection_list' %}" class="btn btn-ghost">Back to Collections</a>
     </div>
 
-    <form method="post" class="space-y-6" id="flashcard-form">
+    <form method="post" enctype="multipart/form-data" class="space-y-6" id="flashcard-form">
         {% csrf_token %}
 
         <div class="form-control">
@@ -19,11 +19,52 @@
             {{ form.front }}
         </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Front Layout</span></label>
+                {{ form.front_layout }}
+                {% if form.front_layout.errors %}
+                    <div class="text-error text-sm">{{ form.front_layout.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Front Image</span></label>
+                {{ form.front_image }}
+                {% if form.instance.pk and form.instance.front_image %}
+                    <div class="mt-2">
+                        <div class="text-xs opacity-70 mb-1">Current:</div>
+                        <img src="{{ form.instance.front_image.url }}" alt="Front image" class="max-h-40 rounded border border-base-300" />
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
         <div class="form-control">
             <label class="label">
                 <span class="label-text text-lg font-semibold">Back</span>
             </label>
             {{ form.back }}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Back Layout</span></label>
+                {{ form.back_layout }}
+                {% if form.back_layout.errors %}
+                    <div class="text-error text-sm">{{ form.back_layout.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Back Image</span></label>
+                {{ form.back_image }}
+                <label class="label"><span class="label-text-alt">Optional; will be resized automatically</span></label>
+                {% if form.instance.pk and form.instance.back_image %}
+                    <div class="mt-2">
+                        <div class="text-xs opacity-70 mb-1">Current:</div>
+                        <img src="{{ form.instance.back_image.url }}" alt="Back image" class="max-h-40 rounded border border-base-300" />
+                    </div>
+                {% endif %}
+            </div>
         </div>
 
         <div class="form-control">
