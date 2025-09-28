@@ -19,6 +19,27 @@ class Flashcard(models.Model):
     back_layout = models.CharField(max_length=32, choices=LAYOUT_CHOICES, default=LAYOUT_TEXT_ONLY)
     front_image = models.ImageField(upload_to='flashcards/', blank=True, null=True)
     back_image = models.ImageField(upload_to='flashcards/', blank=True, null=True)
+
+    # Optional extra info boxes per side
+    EXTRA_NONE = 'none'
+    EXTRA_TIP = 'tip'
+    EXTRA_WARNING = 'warning'
+    EXTRA_CHECK = 'check'
+    EXTRA_SEE_ALSO = 'see_also'
+    EXTRA_INFO = 'info'
+    EXTRA_CHOICES = [
+        (EXTRA_NONE, 'None'),
+        (EXTRA_TIP, 'Tip'),
+        (EXTRA_WARNING, 'Warning'),
+        (EXTRA_CHECK, 'Check'),
+        (EXTRA_SEE_ALSO, 'See also'),
+        (EXTRA_INFO, 'Info'),
+    ]
+
+    front_extra = models.TextField(blank=True, default='')
+    front_extra_style = models.CharField(max_length=16, choices=EXTRA_CHOICES, default=EXTRA_NONE)
+    back_extra = models.TextField(blank=True, default='')
+    back_extra_style = models.CharField(max_length=16, choices=EXTRA_CHOICES, default=EXTRA_NONE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()

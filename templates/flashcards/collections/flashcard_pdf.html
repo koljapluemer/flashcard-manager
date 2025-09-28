@@ -31,6 +31,7 @@
     </style>
 </head>
 <body>
+    {% include 'icons/sprite.svg' %}
     <style>
         /* Apply collection-specific theme variables for the whole document */
         :root {
@@ -43,12 +44,12 @@
     {% for flashcard in flashcards %}
         <!-- Front of flashcard -->
         <div class="flashcard">
-            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.front_layout image=flashcard.front_image content=flashcard.front %}
+            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.front_layout image=flashcard.front_image content=flashcard.front extra_html=flashcard.front_extra extra_style=flashcard.front_extra_style %}
         </div>
 
         <!-- Back of flashcard -->
         <div class="flashcard">
-            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.back_layout image=flashcard.back_image content=flashcard.back %}
+            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.back_layout image=flashcard.back_image content=flashcard.back extra_html=flashcard.back_extra extra_style=flashcard.back_extra_style %}
         </div>
     {% endfor %}
 </body>

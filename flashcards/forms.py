@@ -18,7 +18,11 @@ class FlashcardForm(forms.ModelForm):
     )
     class Meta:
         model = Flashcard
-        fields = ['front', 'front_layout', 'front_image', 'back', 'back_layout', 'back_image', 'collections']
+        fields = [
+            'front', 'front_layout', 'front_image', 'front_extra_style', 'front_extra',
+            'back', 'back_layout', 'back_image', 'back_extra_style', 'back_extra',
+            'collections'
+        ]
         widgets = {
             'front': SummernoteWidget(),
             'back': SummernoteWidget(),
@@ -26,6 +30,10 @@ class FlashcardForm(forms.ModelForm):
             'back_layout': forms.Select(attrs={'class': 'select select-bordered w-full'}),
             'front_image': forms.ClearableFileInput(attrs={'class': 'file-input file-input-bordered w-full', 'accept': 'image/*'}),
             'back_image': forms.ClearableFileInput(attrs={'class': 'file-input file-input-bordered w-full', 'accept': 'image/*'}),
+            'front_extra_style': forms.Select(attrs={'class': 'select select-bordered w-full'}),
+            'back_extra_style': forms.Select(attrs={'class': 'select select-bordered w-full'}),
+            'front_extra': SummernoteWidget(),
+            'back_extra': SummernoteWidget(),
         }
 
     def __init__(self, *args, **kwargs):
