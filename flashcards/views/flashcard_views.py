@@ -17,8 +17,11 @@ def flashcard_create(request):
     if request.method == 'POST':
         form = FlashcardForm(request.POST)
         if form.is_valid():
-            form.save()
+            flashcard = form.save()
             messages.success(request, 'Flashcard created successfully.')
+            selected = list(form.cleaned_data.get('collections', []))
+            if len(selected) == 1:
+                return redirect('collection_detail', pk=selected[0].pk)
             return redirect('collection_list')
     else:
         form = FlashcardForm()
@@ -31,8 +34,11 @@ def flashcard_edit(request, pk):
     if request.method == 'POST':
         form = FlashcardForm(request.POST, instance=flashcard)
         if form.is_valid():
-            form.save()
+            flashcard = form.save()
             messages.success(request, 'Flashcard updated successfully.')
+            selected = list(form.cleaned_data.get('collections', []))
+            if len(selected) == 1:
+                return redirect('collection_detail', pk=selected[0].pk)
             return redirect('collection_list')
     else:
         form = FlashcardForm(instance=flashcard)
@@ -43,8 +49,12 @@ def flashcard_edit(request, pk):
 def flashcard_delete(request, pk):
     flashcard = get_object_or_404(Flashcard, pk=pk)
     if request.method == 'POST':
+        # capture related collections before delete
+        related = list(flashcard.flashcardcollection_set.all())
         flashcard.delete()
         messages.success(request, 'Flashcard deleted successfully.')
+        if len(related) == 1:
+            return redirect('collection_detail', pk=related[0].pk)
         return redirect('collection_list')
     return render(request, 'flashcards/delete.html', {'flashcard': flashcard})
 

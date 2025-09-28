@@ -8,14 +8,13 @@ class FlashcardCollectionForm(forms.ModelForm):
     class Meta:
         model = FlashcardCollection
         fields = [
-            'title', 'description', 'flashcards',
+            'title', 'description',
             'header_text', 'header_text_color', 'header_bg_color',
             'card_text_color', 'card_bg_color',
         ]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'input input-bordered w-full'}),
             'description': forms.Textarea(attrs={'class': 'textarea textarea-bordered w-full', 'rows': 3}),
-            'flashcards': forms.CheckboxSelectMultiple(),
             'header_text': forms.TextInput(attrs={'class': 'input input-bordered w-full', 'placeholder': 'e.g. Chapter 1: Basics'}),
             'header_text_color': forms.TextInput(attrs={'type': 'color', 'class': 'input input-bordered w-24 p-1'}),
             'header_bg_color': forms.TextInput(attrs={'type': 'color', 'class': 'input input-bordered w-24 p-1'}),
@@ -25,7 +24,6 @@ class FlashcardCollectionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['flashcards'].queryset = Flashcard.objects.all().order_by('-created_at')
 
 
 class CSVUploadForm(forms.Form):

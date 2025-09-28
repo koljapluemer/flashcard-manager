@@ -28,31 +28,47 @@
         </h2>
 
         {% if collection.flashcards.all|length %}
-            <div class="overflow-x-auto">
-                <table class="table table-zebra w-full">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Front</th>
-                            <th>Back</th>
-                            <th>Created</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for flashcard in collection.flashcards.all %}
-                        <tr>
-                            <td>{{ flashcard.id }}</td>
-                            <td>{{ flashcard.front|truncatewords:10|safe }}</td>
-                            <td>{{ flashcard.back|truncatewords:10|safe }}</td>
-                            <td>{{ flashcard.created_at|date:"M d, Y" }}</td>
-                            <td>
-                                <div class="flex gap-2">
-                                    <button class="btn btn-xs" onclick="togglePreview('fc-{{ flashcard.id }}')">Preview</button>
-                                    <a href="{% url 'flashcard_edit' flashcard.pk %}" class="btn btn-xs btn-outline">Edit</a>
-                                </div>
-                            </td>
-                        </tr>
+            <form method="post">
+                {% csrf_token %}
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-3">
+                        <label class="label cursor-pointer">
+                            <input id="select-all" type="checkbox" class="checkbox checkbox-sm" />
+                            <span class="ml-2 text-sm">Select all</span>
+                        </label>
+                        <button type="submit" class="btn btn-sm btn-error" title="Remove selected from this collection">Remove selected</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="table table-zebra w-full">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>ID</th>
+                                <th>Front</th>
+                                <th>Back</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for flashcard in collection.flashcards.all %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="flashcards" value="{{ flashcard.id }}" class="row-check checkbox checkbox-sm" />
+                                </td>
+                                <td>{{ flashcard.id }}</td>
+                                <td>{{ flashcard.front|truncatewords:10|safe }}</td>
+                                <td>{{ flashcard.back|truncatewords:10|safe }}</td>
+                                <td>{{ flashcard.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        <button type="button" class="btn btn-xs" onclick="togglePreview('fc-{{ flashcard.id }}')">Preview</button>
+                                        <a href="{% url 'flashcard_edit' flashcard.pk %}" class="btn btn-xs btn-outline">Edit</a>
+                                        <button name="flashcards" value="{{ flashcard.id }}" class="btn btn-xs btn-error" title="Remove from this collection">Remove</button>
+                                    </div>
+                                </td>
+                            </tr>
                         <tr id="fc-{{ flashcard.id }}" class="hidden">
                             <td colspan="5">
                                 <div class="flashcard-theme grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -77,9 +93,10 @@
                             </td>
                         </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
         {% else %}
             <div class="text-center py-8">
                 <p class="text-lg">No flashcards in this collection.</p>
@@ -105,5 +122,14 @@
             row.classList.toggle('hidden');
         }
     }
+    // Select-all behavior for table checkboxes
+    (function() {
+        const selectAll = document.getElementById('select-all');
+        if (!selectAll) return;
+        const checks = () => Array.from(document.querySelectorAll('input.row-check'));
+        selectAll.addEventListener('change', () => {
+            checks().forEach(cb => cb.checked = selectAll.checked);
+        });
+    })();
 </script>
 {% endblock %}

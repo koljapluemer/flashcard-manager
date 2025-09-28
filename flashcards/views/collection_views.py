@@ -53,6 +53,23 @@ def collection_delete(request, pk):
 @login_required
 def collection_detail(request, pk):
     collection = get_object_or_404(FlashcardCollection, pk=pk)
+
+    if request.method == 'POST':
+        ids = request.POST.getlist('flashcards')
+        if ids:
+            try:
+                # Remove selected flashcards from this collection
+                removed = collection.flashcards.filter(pk__in=ids)
+                count = removed.count()
+                for fc in removed:
+                    collection.flashcards.remove(fc)
+                messages.success(request, f'Removed {count} flashcard(s) from the collection.')
+            except Exception:
+                messages.error(request, 'Failed to remove selected flashcards. Please try again.')
+        else:
+            messages.info(request, 'No flashcards selected.')
+        return redirect('collection_detail', pk=collection.pk)
+
     return render(request, 'flashcards/collections/detail.html', {'collection': collection})
 
 
