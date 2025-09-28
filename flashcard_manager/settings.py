@@ -144,9 +144,9 @@ SUMMERNOTE_CONFIG = {
             ['style', ['style']],
             ['font', ['bold', 'italic', 'underline', 'clear']],
             ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
         ],
-        'height': 150,
+        # Make editors larger and remove line-height control
+        'height': 350,
     }
 }
 

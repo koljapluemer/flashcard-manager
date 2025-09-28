@@ -30,3 +30,88 @@
     font-size: 10pt;
     margin: 0.2em 0;
 }
+
+/* --- Additional rich text elements: lists, quotes, code, tables, etc. --- */
+
+/* Lists: compact with clear nesting */
+.flashcard-content ul,
+.flashcard-content ol {
+    margin: 0.2em 0;
+    padding-left: 1.1em; /* slightly more for clarity */
+    list-style-position: outside;
+}
+
+.flashcard-content ul { list-style-type: disc; }
+.flashcard-content ul ul { list-style-type: circle; }
+.flashcard-content ul ul ul { list-style-type: square; }
+
+.flashcard-content ol { list-style-type: decimal; }
+.flashcard-content ol ol { list-style-type: lower-alpha; }
+.flashcard-content ol ol ol { list-style-type: lower-roman; }
+
+.flashcard-content li { margin: 0.1em 0; }
+
+/* Blockquotes: subtle, print-friendly */
+.flashcard-content blockquote {
+    margin: 0.3em 0;
+    padding: 0.3em 0.5em;
+    border-left: 2px solid #888;
+    color: #333;
+    background: #f6f6f6;
+}
+
+/* Inline code */
+.flashcard-content code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: #f3f3f3;
+    padding: 0.05em 0.25em;
+    border-radius: 2px;
+    word-break: break-word;
+}
+
+/* Preformatted blocks */
+.flashcard-content pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: #f3f3f3;
+    padding: 0.3em 0.4em;
+    margin: 0.3em 0;
+    border-radius: 3px;
+    white-space: pre-wrap; /* wrap for tiny card size */
+    word-break: break-word;
+}
+
+/* Images: scale to fit */
+.flashcard-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0.2em 0;
+}
+
+/* Horizontal rule */
+.flashcard-content hr {
+    border: none;
+    border-top: 1px solid #bbb;
+    margin: 0.4em 0;
+}
+
+/* Tables: compact and readable */
+.flashcard-content table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #bbb;
+    font-size: 0.95em;
+    table-layout: fixed;
+}
+
+.flashcard-content th,
+.flashcard-content td {
+    border: 1px solid #bbb;
+    padding: 0.25em 0.35em;
+    vertical-align: top;
+}
+
+.flashcard-content th {
+    background: #efefef;
+    font-weight: 600;
+}
