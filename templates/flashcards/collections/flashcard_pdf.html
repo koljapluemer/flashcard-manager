@@ -26,9 +26,21 @@
     </style>
 </head>
 <body>
+    <style>
+        /* Apply collection-specific theme variables for the whole document */
+        :root {
+            --card-text-color: {{ collection.card_text_color }};
+            --card-bg-color: {{ collection.card_bg_color }};
+            --card-header-bg-color: {{ collection.header_bg_color }};
+            --card-header-text-color: {{ collection.header_text_color }};
+        }
+    </style>
     {% for flashcard in flashcards %}
         <!-- Front of flashcard -->
         <div class="flashcard">
+            {% if collection.header_text %}
+            <div class="flashcard-header">{{ collection.header_text }}</div>
+            {% endif %}
             <div class="flashcard-content">
                 {{ flashcard.front|safe }}
             </div>
@@ -36,6 +48,9 @@
 
         <!-- Back of flashcard -->
         <div class="flashcard">
+            {% if collection.header_text %}
+            <div class="flashcard-header">{{ collection.header_text }}</div>
+            {% endif %}
             <div class="flashcard-content">
                 {{ flashcard.back|safe }}
             </div>

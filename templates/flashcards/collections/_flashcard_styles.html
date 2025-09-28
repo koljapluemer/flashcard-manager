@@ -3,18 +3,32 @@
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     justify-content: flex-start;
     box-sizing: border-box;
-    padding: 0.1in; /* keep inch to match PDF scaling */
+    background: var(--card-bg-color, #f7f7f5);
+    color: var(--card-text-color, #333333);
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
+.flashcard-header {
+    background: var(--card-header-bg-color, #e5e7eb);
+    color: var(--card-header-text-color, #111827);
+    /* Flush against edges; minimal internal padding */
+    padding: 0.04in 0.06in; 
+    font-size: 8pt;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
 .flashcard-content {
     width: 100%;
-    max-height: 100%;
+    height: 100%;
+    flex: 1 1 auto;
     overflow: auto; /* scroll if content exceeds box in web */
+    padding: 0.1in; /* keep inch to match PDF scaling */
 }
 
 /* Preserve Summernote formatting */

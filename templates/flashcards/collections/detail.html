@@ -55,14 +55,21 @@
                         </tr>
                         <tr id="fc-{{ flashcard.id }}" class="hidden">
                             <td colspan="5">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="flashcard-box bg-base-200 rounded border border-base-300 shadow-md">
+                                <div class="flashcard-theme grid grid-cols-1 md:grid-cols-2 gap-6"
+                                     style="--card-text-color: {{ collection.card_text_color }}; --card-bg-color: {{ collection.card_bg_color }}; --card-header-bg-color: {{ collection.header_bg_color }}; --card-header-text-color: {{ collection.header_text_color }};">
+                                    <div class="flashcard-box bg-base-200 rounded border border-base-300 shadow-md overflow-hidden">
                                         <div class="flashcard">
+                                            {% if collection.header_text %}
+                                                <div class="flashcard-header">{{ collection.header_text }}</div>
+                                            {% endif %}
                                             <div class="flashcard-content">{{ flashcard.front|safe }}</div>
                                         </div>
                                     </div>
-                                    <div class="flashcard-box bg-base-200 rounded border border-base-300 shadow-md">
+                                    <div class="flashcard-box bg-base-200 rounded border border-base-300 shadow-md overflow-hidden">
                                         <div class="flashcard">
+                                            {% if collection.header_text %}
+                                                <div class="flashcard-header">{{ collection.header_text }}</div>
+                                            {% endif %}
                                             <div class="flashcard-content">{{ flashcard.back|safe }}</div>
                                         </div>
                                     </div>
