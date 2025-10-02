@@ -14,16 +14,28 @@ def collection_list(request):
 
 
 @login_required
-def collection_create(request):
+def collection_create(request, topic_pk):
+    from ..models import Topic
+
+    topic = get_object_or_404(Topic, pk=topic_pk)
+
     if request.method == 'POST':
         form = FlashcardCollectionForm(request.POST)
         if form.is_valid():
-            form.save()
+            collection = form.save(commit=False)
+            collection.topic = topic
+            collection.save()
             messages.success(request, 'Collection created successfully.')
-            return redirect('collection_list')
+            return redirect('curriculum_list')
     else:
         form = FlashcardCollectionForm()
-    return render(request, 'flashcards/collections/form.html', {'form': form, 'title': 'Create Collection'})
+
+    context = {
+        'form': form,
+        'title': 'Create Collection',
+        'topic': topic
+    }
+    return render(request, 'flashcards/collections/form.html', context)
 
 
 @login_required

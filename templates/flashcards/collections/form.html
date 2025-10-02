@@ -12,6 +12,10 @@
     <form method="post" class="space-y-6">
         {% csrf_token %}
 
+        <div class="alert">
+            <span><strong>Topic:</strong> {{ topic.subject.curriculum.name }} > {{ topic.subject.name }} > {{ topic.name }}</span>
+        </div>
+
         <div class="form-control">
             <label class="label">
                 <span class="label-text text-lg font-semibold">Title</span>

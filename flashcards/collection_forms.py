@@ -1,5 +1,5 @@
 from django import forms
-from .models import FlashcardCollection, Flashcard
+from .models import FlashcardCollection, Flashcard, Topic
 import csv
 import os
 
@@ -8,12 +8,11 @@ class FlashcardCollectionForm(forms.ModelForm):
     class Meta:
         model = FlashcardCollection
         fields = [
-            'topic', 'title', 'description',
+            'title', 'description',
             'header_text', 'header_text_color', 'header_bg_color',
             'card_text_color', 'card_bg_color',
         ]
         widgets = {
-            'topic': forms.Select(attrs={'class': 'select select-bordered w-full'}),
             'title': forms.TextInput(attrs={'class': 'input input-bordered w-full'}),
             'description': forms.Textarea(attrs={'class': 'textarea textarea-bordered w-full', 'rows': 3}),
             'header_text': forms.TextInput(attrs={'class': 'input input-bordered w-full', 'placeholder': 'e.g. Chapter 1: Basics'}),
@@ -22,9 +21,6 @@ class FlashcardCollectionForm(forms.ModelForm):
             'card_text_color': forms.TextInput(attrs={'type': 'color', 'class': 'h-10 w-20 border border-base-300 rounded bg-base-100'}),
             'card_bg_color': forms.TextInput(attrs={'type': 'color', 'class': 'h-10 w-20 border border-base-300 rounded bg-base-100'}),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 class CSVUploadForm(forms.Form):

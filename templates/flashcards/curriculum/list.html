@@ -52,6 +52,7 @@
                                             <div class="collapse-title text-sm font-medium flex items-center justify-between pr-12">
                                                 <span>{{ topic.name }}</span>
                                                 <div class="flex gap-2 z-10">
+                                                    <a href="{% url 'collection_create_for_topic' topic.id %}" class="btn btn-xs btn-ghost" onclick="event.stopPropagation()">+ Collection</a>
                                                     <a href="{% url 'topic_edit' topic.id %}" class="btn btn-xs btn-ghost" onclick="event.stopPropagation()">Edit</a>
                                                     <a href="{% url 'topic_delete' topic.id %}" class="btn btn-xs btn-ghost text-error" onclick="event.stopPropagation()">Delete</a>
                                                 </div>

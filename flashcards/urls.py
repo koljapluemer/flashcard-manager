@@ -19,13 +19,12 @@ urlpatterns = [
 
     # Collection URLs
     path('collections/', collection_list, name='collection_list'),
-    path('collections/create/', collection_create, name='collection_create'),
-    path('collections/upload-csv/', collection_upload_csv, name='collection_upload_csv'),
     path('collections/<int:pk>/', collection_detail, name='collection_detail'),
     path('collections/<int:pk>/edit/', collection_edit, name='collection_edit'),
     path('collections/<int:pk>/delete/', collection_delete, name='collection_delete'),
     path('collections/<int:pk>/history/', collection_history, name='collection_history'),
     path('collections/<int:pk>/pdf/', collection_pdf, name='collection_pdf'),
+    path('collections/upload-csv/', collection_upload_csv, name='collection_upload_csv'),
     path('practice/<int:pk>/', collection_practice, name='collection_practice'),
 
     # Curriculum URLs
@@ -43,4 +42,7 @@ urlpatterns = [
     path('subjects/<int:subject_pk>/topics/create/', topic_create, name='topic_create'),
     path('topics/<int:pk>/edit/', topic_edit, name='topic_edit'),
     path('topics/<int:pk>/delete/', topic_delete, name='topic_delete'),
+
+    # Collection creation under topic
+    path('topics/<int:topic_pk>/collections/create/', collection_create, name='collection_create_for_topic'),
 ]

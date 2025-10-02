@@ -94,7 +94,7 @@ class Flashcard(models.Model):
 
 
 class FlashcardCollection(models.Model):
-    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, blank=True, related_name='collections')
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='collections')
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     flashcards = models.ManyToManyField(Flashcard, blank=True)
