@@ -2,6 +2,51 @@ from django.db import models
 from simple_history.models import HistoricalRecords
 
 
+class Curriculum(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    class Meta:
+        verbose_name_plural = "Curricula"
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Subject(models.Model):
+    curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE, related_name='subjects')
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.curriculum.name} - {self.name}"
+
+
+class Topic(models.Model):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='topics')
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.subject.name} - {self.name}"
+
+
 class Flashcard(models.Model):
     front = models.TextField()
     back = models.TextField()
@@ -49,6 +94,7 @@ class Flashcard(models.Model):
 
 
 class FlashcardCollection(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, blank=True, related_name='collections')
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     flashcards = models.ManyToManyField(Flashcard, blank=True)
