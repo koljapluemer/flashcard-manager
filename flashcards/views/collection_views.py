@@ -40,7 +40,10 @@ def collection_create(request, topic_pk):
 
 @login_required
 def collection_edit(request, pk):
-    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    collection = get_object_or_404(
+        FlashcardCollection.objects.select_related('topic__subject__curriculum'),
+        pk=pk
+    )
     if request.method == 'POST':
         form = FlashcardCollectionForm(request.POST, instance=collection)
         if form.is_valid():
@@ -49,7 +52,11 @@ def collection_edit(request, pk):
             return redirect('collection_list')
     else:
         form = FlashcardCollectionForm(instance=collection)
-    return render(request, 'flashcards/collections/form.html', {'form': form, 'title': 'Edit Collection'})
+    return render(request, 'flashcards/collections/form.html', {
+        'form': form,
+        'title': 'Edit Collection',
+        'topic': collection.topic
+    })
 
 
 @login_required

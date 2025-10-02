@@ -7,7 +7,6 @@
     <h1 class="text-3xl font-bold">Collections</h1>
     <div class="flex gap-2">
         <a href="{% url 'collection_upload_csv' %}" class="btn btn-secondary">Upload CSV</a>
-        <a href="{% url 'collection_create' %}" class="btn btn-primary">Create Collection</a>
     </div>
 </div>
 
@@ -57,8 +56,7 @@
     </div>
 {% else %}
     <div class="text-center py-12">
-        <p class="text-lg">No collections yet.</p>
-        <a href="{% url 'collection_create' %}" class="btn btn-primary mt-4">Create your first collection</a>
+        <p class="text-lg">No collections yet. Create collections from the Curricula page.</p>
     </div>
 {% endif %}
 {% endblock %}

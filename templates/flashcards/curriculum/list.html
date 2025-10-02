@@ -63,21 +63,38 @@
                                                 {% endif %}
 
                                                 {% if topic.collections.all %}
-                                                    <div class="ml-4">
-                                                        <h4 class="text-xs font-semibold mb-2">Collections:</h4>
-                                                        <ul class="space-y-1">
-                                                            {% for collection in topic.collections.all %}
-                                                            <li class="text-xs">
-                                                                <a href="{% url 'collection_detail' collection.id %}" class="link link-hover">{{ collection.title }}</a>
-                                                                {% if collection.description %}
-                                                                    <span class="opacity-60"> - {{ collection.description|truncatewords:10 }}</span>
-                                                                {% endif %}
-                                                            </li>
-                                                            {% endfor %}
-                                                        </ul>
+                                                    <div class="overflow-x-auto">
+                                                        <table class="table table-xs">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Title</th>
+                                                                    <th>Description</th>
+                                                                    <th>Flashcards</th>
+                                                                    <th>Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for collection in topic.collections.all %}
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="{% url 'collection_detail' collection.id %}" class="link link-hover">{{ collection.title }}</a>
+                                                                    </td>
+                                                                    <td class="opacity-70">{{ collection.description|truncatewords:15 }}</td>
+                                                                    <td>{{ collection.flashcards.count }}</td>
+                                                                    <td>
+                                                                        <div class="flex gap-1">
+                                                                            <a href="{% url 'collection_detail' collection.id %}" class="btn btn-xs btn-ghost">View</a>
+                                                                            <a href="{% url 'collection_edit' collection.id %}" class="btn btn-xs btn-ghost">Edit</a>
+                                                                            <a href="{% url 'collection_delete' collection.id %}" class="btn btn-xs btn-ghost text-error">Delete</a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 {% else %}
-                                                    <p class="text-xs opacity-50 ml-4">No collections yet</p>
+                                                    <p class="text-xs opacity-50">No collections yet</p>
                                                 {% endif %}
                                             </div>
                                         </div>
