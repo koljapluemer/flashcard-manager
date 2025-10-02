@@ -119,4 +119,47 @@
         <p class="text-lg opacity-60">No curricula yet. Create your first curriculum to get started.</p>
     </div>
 {% endif %}
+
+<script>
+(function() {
+    const STORAGE_KEY = 'curriculum-tree-state';
+
+    // Load state from localStorage
+    function loadState() {
+        try {
+            const state = localStorage.getItem(STORAGE_KEY);
+            return state ? JSON.parse(state) : {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    // Save state to localStorage
+    function saveState(state) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+            console.error('Failed to save collapse state:', e);
+        }
+    }
+
+    // Restore collapse state on page load
+    const state = loadState();
+    const checkboxes = document.querySelectorAll('.collapse input[type="checkbox"]');
+
+    checkboxes.forEach(checkbox => {
+        const name = checkbox.getAttribute('name');
+        if (name && state[name] !== undefined) {
+            checkbox.checked = state[name];
+        }
+
+        // Listen for changes and save to localStorage
+        checkbox.addEventListener('change', function() {
+            const currentState = loadState();
+            currentState[name] = this.checked;
+            saveState(currentState);
+        });
+    });
+})();
+</script>
 {% endblock %}
