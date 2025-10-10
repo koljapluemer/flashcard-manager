@@ -5,8 +5,14 @@
 {% block content %}
 <div class="max-w-2xl mx-auto">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Upload CSV</h1>
-        <a href="{% url 'collection_list' %}" class="btn btn-ghost">Back to Collections</a>
+        <h1 class="text-3xl font-bold">
+            {% if collection %}Upload CSV to {{ collection.title }}{% else %}Upload CSV{% endif %}
+        </h1>
+        {% if collection %}
+            <a href="{% url 'collection_detail' collection.pk %}" class="btn btn-ghost">Back to Collection</a>
+        {% else %}
+            <a href="{% url 'collection_list' %}" class="btn btn-ghost">Back to Collections</a>
+        {% endif %}
     </div>
 
     <div class="bg-base-200 p-6 rounded-lg mb-6">
@@ -50,8 +56,14 @@
         </div>
 
         <div class="flex gap-4">
-            <button type="submit" class="btn btn-primary">Upload & Create Collection</button>
-            <a href="{% url 'collection_list' %}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                {% if collection %}Upload & Add to Collection{% else %}Upload & Create Collection{% endif %}
+            </button>
+            {% if collection %}
+                <a href="{% url 'collection_detail' collection.pk %}" class="btn btn-ghost">Cancel</a>
+            {% else %}
+                <a href="{% url 'collection_list' %}" class="btn btn-ghost">Cancel</a>
+            {% endif %}
         </div>
     </form>
 </div>

@@ -24,7 +24,8 @@ urlpatterns = [
     path('collections/<int:pk>/delete/', collection_delete, name='collection_delete'),
     path('collections/<int:pk>/history/', collection_history, name='collection_history'),
     path('collections/<int:pk>/pdf/', collection_pdf, name='collection_pdf'),
-    path('collections/upload-csv/', collection_upload_csv, name='collection_upload_csv'),
+    path('collections/<int:pk>/upload-csv/', collection_upload_csv, name='collection_upload_csv'),
+    path('collections/upload-csv/', collection_upload_csv, name='collection_upload_csv_new'),
     path('practice/<int:pk>/', collection_practice, name='collection_practice'),
 
     # Curriculum URLs
