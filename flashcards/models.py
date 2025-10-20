@@ -48,6 +48,7 @@ class Topic(models.Model):
 
 
 class Flashcard(models.Model):
+    collection = models.ForeignKey('FlashcardCollection', on_delete=models.CASCADE, related_name='flashcards')
     front = models.TextField()
     back = models.TextField()
     # Optional images + layout per side
@@ -97,7 +98,6 @@ class FlashcardCollection(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='collections')
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    flashcards = models.ManyToManyField(Flashcard, blank=True)
     # Appearance settings
     header_text = models.CharField(max_length=200, blank=True, default='')
     header_text_color = models.CharField(max_length=7, blank=True, default='#111827')  # near-black

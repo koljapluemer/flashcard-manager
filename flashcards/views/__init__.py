@@ -6,7 +6,6 @@ from .flashcard_views import (
     flashcard_history
 )
 from .collection_views import (
-    collection_list,
     collection_create,
     collection_edit,
     collection_delete,
@@ -38,7 +37,6 @@ __all__ = [
     'flashcard_edit',
     'flashcard_delete',
     'flashcard_history',
-    'collection_list',
     'collection_create',
     'collection_edit',
     'collection_delete',

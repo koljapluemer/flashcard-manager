@@ -12,7 +12,6 @@
             {% endif %}
             <a href="{% url 'collection_pdf' collection.pk %}" class="btn btn-success">Download PDF</a>
             <a href="{% url 'collection_edit' collection.pk %}" class="btn btn-outline">Edit</a>
-            <a href="{% url 'collection_list' %}" class="btn btn-ghost">Back to List</a>
         </div>
     </div>
 
@@ -27,9 +26,10 @@
             <h2 class="text-xl font-semibold">
                 Flashcards ({{ collection.flashcards.count }})
             </h2>
-            <a href="{% url 'collection_upload_csv' collection.pk %}" class="btn btn-sm btn-outline">
-                Upload CSV
-            </a>
+            <div class="flex gap-2">
+                <a href="{% url 'flashcard_create' collection_pk=collection.pk %}" class="btn btn-sm btn-primary">+ New Flashcard</a>
+                <a href="{% url 'collection_upload_csv' collection.pk %}" class="btn btn-sm btn-outline">Upload CSV</a>
+            </div>
         </div>
 
         {% if collection.flashcards.all|length %}
@@ -41,7 +41,7 @@
                             <input id="select-all" type="checkbox" class="checkbox checkbox-sm" />
                             <span class="ml-2 text-sm">Select all</span>
                         </label>
-                        <button type="submit" class="btn btn-sm btn-error" title="Remove selected from this collection">Remove selected</button>
+                        <button type="submit" class="btn btn-sm btn-error" title="Delete selected flashcards">Delete selected</button>
                     </div>
                 </div>
                 <div class="overflow-x-auto">

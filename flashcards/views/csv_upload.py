@@ -9,12 +9,10 @@ import os
 
 
 @login_required
-def collection_upload_csv(request, pk=None):
-    """Upload CSV to append to existing collection (if pk provided) or create new collection."""
-    collection = None
-    if pk:
-        from django.shortcuts import get_object_or_404
-        collection = get_object_or_404(FlashcardCollection, pk=pk)
+def collection_upload_csv(request, pk):
+    """Upload CSV to add flashcards to existing collection."""
+    from django.shortcuts import get_object_or_404
+    collection = get_object_or_404(FlashcardCollection, pk=pk)
 
     if request.method == 'POST':
         form = CSVUploadForm(request.POST, request.FILES)
@@ -40,34 +38,21 @@ def collection_upload_csv(request, pk=None):
                         back = row[1].strip()
 
                         if front and back:
-                            flashcards_to_create.append(Flashcard(front=front, back=back))
+                            flashcards_to_create.append(Flashcard(
+                                collection=collection,
+                                front=front,
+                                back=back
+                            ))
                             valid_rows += 1
 
-                    # Bulk create flashcards
-                    created_flashcards = Flashcard.objects.bulk_create(flashcards_to_create)
+                    # Bulk create flashcards with collection assigned
+                    Flashcard.objects.bulk_create(flashcards_to_create)
 
-                    # If appending to existing collection
-                    if collection:
-                        collection.flashcards.add(*created_flashcards)
-                        messages.success(
-                            request,
-                            f'Successfully added {valid_rows} flashcards to "{collection.title}".'
-                        )
-                        return redirect('collection_detail', pk=collection.pk)
-                    else:
-                        # Create new collection
-                        filename = os.path.splitext(csv_file.name)[0]
-                        collection_title = filename.replace('_', ' ').replace('-', ' ').title()
-                        new_collection = FlashcardCollection.objects.create(
-                            title=collection_title,
-                            description=f'Imported from {csv_file.name}'
-                        )
-                        new_collection.flashcards.set(created_flashcards)
-                        messages.success(
-                            request,
-                            f'Successfully created collection "{collection_title}" with {valid_rows} flashcards.'
-                        )
-                        return redirect('collection_detail', pk=new_collection.pk)
+                    messages.success(
+                        request,
+                        f'Successfully added {valid_rows} flashcards to "{collection.title}".'
+                    )
+                    return redirect('collection_detail', pk=collection.pk)
 
             except Exception as e:
                 messages.error(request, f'Error processing CSV file: {str(e)}')

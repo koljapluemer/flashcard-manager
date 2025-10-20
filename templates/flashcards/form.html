@@ -6,7 +6,6 @@
 <div class="max-w-4xl mx-auto">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">{{ title }}</h1>
-        <a href="{% url 'collection_list' %}" class="btn btn-ghost">Back to Collections</a>
     </div>
 
     <form method="post" enctype="multipart/form-data" class="space-y-6" id="flashcard-form">
@@ -85,51 +84,11 @@
             {{ form.back_extra }}
         </div>
 
-        <div class="form-control">
-            <label class="label">
-                <span class="label-text text-lg font-semibold">Collections</span>
-            </label>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto p-4 border border-base-300 rounded-lg">
-                {% for choice in form.collections %}
-                    <div class="form-control">
-                        <label class="label cursor-pointer justify-start gap-3">
-                            {{ choice.tag }}
-                            <div class="flex-1">
-                                <div class="text-sm font-medium">{{ choice.choice_label }}</div>
-                            </div>
-                        </label>
-                    </div>
-                {% endfor %}
-            </div>
-            {% if form.collections.errors %}
-                <div class="text-error text-sm mt-2">{{ form.collections.errors.0 }}</div>
-            {% endif %}
-        </div>
-
         <div class="flex gap-4">
             <button type="submit" class="btn btn-primary">Save Flashcard</button>
-            <a href="{% url 'collection_list' %}" class="btn btn-ghost">Cancel</a>
         </div>
     </form>
 </div>
 
 {{ form.media }}
-
-<script>
-    // Frontend enforcement: require at least one collection selected
-    (function() {
-        const form = document.getElementById('flashcard-form');
-        if (!form) return;
-        form.addEventListener('submit', function(e) {
-            const checkboxes = form.querySelectorAll('input[type="checkbox"][name="collections"]');
-            let anyChecked = false;
-            checkboxes.forEach(cb => { if (cb.checked) anyChecked = true; });
-            if (!anyChecked) {
-                e.preventDefault();
-                alert('Please select at least one collection.');
-            }
-        });
-    })();
-
-</script>
 {% endblock %}

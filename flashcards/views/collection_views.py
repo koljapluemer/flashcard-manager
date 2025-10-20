@@ -8,12 +8,6 @@ from ..utils import generate_pdf
 
 
 @login_required
-def collection_list(request):
-    collections = FlashcardCollection.objects.all().order_by('-created_at')
-    return render(request, 'flashcards/collections/list.html', {'collections': collections})
-
-
-@login_required
 def collection_create(request, topic_pk):
     from ..models import Topic
 
@@ -81,11 +75,15 @@ def collection_edit(request, pk):
 
 @login_required
 def collection_delete(request, pk):
-    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    collection = get_object_or_404(
+        FlashcardCollection.objects.select_related('topic__subject__curriculum'),
+        pk=pk
+    )
+    topic_pk = collection.topic.pk
     if request.method == 'POST':
         collection.delete()
         messages.success(request, 'Collection deleted successfully.')
-        return redirect('collection_list')
+        return redirect('topic_detail', topic_pk=topic_pk)
     return render(request, 'flashcards/collections/delete.html', {'collection': collection})
 
 
@@ -100,14 +98,12 @@ def collection_detail(request, pk):
         ids = request.POST.getlist('flashcards')
         if ids:
             try:
-                # Remove selected flashcards from this collection
-                removed = collection.flashcards.filter(pk__in=ids)
-                count = removed.count()
-                for fc in removed:
-                    collection.flashcards.remove(fc)
-                messages.success(request, f'Removed {count} flashcard(s) from the collection.')
+                # Delete selected flashcards
+                deleted = collection.flashcards.filter(pk__in=ids).delete()
+                count = deleted[0] if deleted else 0
+                messages.success(request, f'Deleted {count} flashcard(s).')
             except Exception:
-                messages.error(request, 'Failed to remove selected flashcards. Please try again.')
+                messages.error(request, 'Failed to delete selected flashcards. Please try again.')
         else:
             messages.info(request, 'No flashcards selected.')
         return redirect('collection_detail', pk=collection.pk)

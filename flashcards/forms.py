@@ -10,18 +10,11 @@ except Exception:
 
 
 class FlashcardForm(forms.ModelForm):
-    collections = forms.ModelMultipleChoiceField(
-        queryset=FlashcardCollection.objects.all().order_by('-created_at'),
-        required=True,
-        widget=forms.CheckboxSelectMultiple(),
-        label='Collections'
-    )
     class Meta:
         model = Flashcard
         fields = [
             'front', 'front_layout', 'front_image', 'front_extra_style', 'front_extra',
-            'back', 'back_layout', 'back_image', 'back_extra_style', 'back_extra',
-            'collections'
+            'back', 'back_layout', 'back_image', 'back_extra_style', 'back_extra'
         ]
         widgets = {
             'front': SummernoteWidget(),
@@ -36,20 +29,8 @@ class FlashcardForm(forms.ModelForm):
             'back_extra': SummernoteWidget(),
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Pre-select collections for existing instance
-        if self.instance and self.instance.pk:
-            self.fields['collections'].initial = self.instance.flashcardcollection_set.all()
-
-    def clean_collections(self):
-        cols = self.cleaned_data.get('collections')
-        if not cols or len(cols) == 0:
-            raise forms.ValidationError('Select at least one collection.')
-        return cols
-
     def save(self, commit=True):
-        flashcard = super().save(commit=commit)
+        flashcard = super().save(commit=False)
         # Process images (resize/compress) if provided
         def process_image(field_name):
             if Image is None:
@@ -76,16 +57,6 @@ class FlashcardForm(forms.ModelForm):
         process_image('back_image')
         if commit:
             flashcard.save()
-        # Sync collections membership
-        selected = set(self.cleaned_data.get('collections', []))
-        if flashcard.pk:
-            current = set(flashcard.flashcardcollection_set.all())
-            # Add to newly selected
-            for col in selected - current:
-                col.flashcards.add(flashcard)
-            # Remove from unselected
-            for col in current - selected:
-                col.flashcards.remove(flashcard)
         return flashcard
 
     def clean(self):
