@@ -10,4 +10,10 @@ class CustomLoginView(LoginView):
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    from django.shortcuts import redirect
+    return redirect('curriculum_list')
+
+
+@login_required
+def settings(request):
+    return render(request, 'accounts/settings.html')

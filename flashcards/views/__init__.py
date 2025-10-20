@@ -21,12 +21,15 @@ from .curriculum_views import (
     curriculum_create,
     curriculum_edit,
     curriculum_delete,
+    subject_list,
     subject_create,
     subject_edit,
     subject_delete,
+    topic_list,
     topic_create,
     topic_edit,
-    topic_delete
+    topic_delete,
+    collection_list_for_topic
 )
 
 __all__ = [
@@ -48,10 +51,13 @@ __all__ = [
     'curriculum_create',
     'curriculum_edit',
     'curriculum_delete',
+    'subject_list',
     'subject_create',
     'subject_edit',
     'subject_delete',
+    'topic_list',
     'topic_create',
     'topic_edit',
-    'topic_delete'
+    'topic_delete',
+    'collection_list_for_topic'
 ]

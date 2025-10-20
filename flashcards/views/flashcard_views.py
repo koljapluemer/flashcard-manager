@@ -31,6 +31,24 @@ def flashcard_create(request):
 @login_required
 def flashcard_edit(request, pk):
     flashcard = get_object_or_404(Flashcard, pk=pk)
+
+    # Get first collection for breadcrumb context
+    first_collection = flashcard.flashcardcollection_set.select_related(
+        'topic__subject__curriculum'
+    ).first()
+
+    breadcrumbs = []
+    if first_collection:
+        topic = first_collection.topic
+        breadcrumbs = [
+            {'name': 'Curricula', 'url': '/flashcards/curricula/'},
+            {'name': topic.subject.curriculum.name, 'url': f'/flashcards/curricula/{topic.subject.curriculum.pk}/subjects/'},
+            {'name': topic.subject.name, 'url': f'/flashcards/subjects/{topic.subject.pk}/topics/'},
+            {'name': topic.name, 'url': f'/flashcards/topics/{topic.pk}/collections/'},
+            {'name': first_collection.title, 'url': f'/flashcards/collections/{first_collection.pk}/'},
+            {'name': f'{flashcard.front[:30]}...', 'url': None}
+        ]
+
     if request.method == 'POST':
         form = FlashcardForm(request.POST, request.FILES, instance=flashcard)
         if form.is_valid():
@@ -42,7 +60,12 @@ def flashcard_edit(request, pk):
             return redirect('collection_list')
     else:
         form = FlashcardForm(instance=flashcard)
-    return render(request, 'flashcards/form.html', {'form': form, 'title': 'Edit Flashcard'})
+
+    return render(request, 'flashcards/form.html', {
+        'form': form,
+        'title': 'Edit Flashcard',
+        'breadcrumbs': breadcrumbs
+    })
 
 
 @login_required

@@ -17,7 +17,15 @@ def collection_list(request):
 def collection_create(request, topic_pk):
     from ..models import Topic
 
-    topic = get_object_or_404(Topic, pk=topic_pk)
+    topic = get_object_or_404(Topic.objects.select_related('subject__curriculum'), pk=topic_pk)
+
+    breadcrumbs = [
+        {'name': 'Curricula', 'url': '/flashcards/curricula/'},
+        {'name': topic.subject.curriculum.name, 'url': f'/flashcards/curricula/{topic.subject.curriculum.pk}/subjects/'},
+        {'name': topic.subject.name, 'url': f'/flashcards/subjects/{topic.subject.pk}/topics/'},
+        {'name': topic.name, 'url': f'/flashcards/topics/{topic.pk}/collections/'},
+        {'name': 'New Collection', 'url': None}
+    ]
 
     if request.method == 'POST':
         form = FlashcardCollectionForm(request.POST)
@@ -26,14 +34,15 @@ def collection_create(request, topic_pk):
             collection.topic = topic
             collection.save()
             messages.success(request, 'Collection created successfully.')
-            return redirect('curriculum_list')
+            return redirect('topic_detail', topic_pk=topic.pk)
     else:
         form = FlashcardCollectionForm()
 
     context = {
         'form': form,
         'title': 'Create Collection',
-        'topic': topic
+        'topic': topic,
+        'breadcrumbs': breadcrumbs
     }
     return render(request, 'flashcards/collections/form.html', context)
 
@@ -44,18 +53,29 @@ def collection_edit(request, pk):
         FlashcardCollection.objects.select_related('topic__subject__curriculum'),
         pk=pk
     )
+
+    breadcrumbs = [
+        {'name': 'Curricula', 'url': '/flashcards/curricula/'},
+        {'name': collection.topic.subject.curriculum.name, 'url': f'/flashcards/curricula/{collection.topic.subject.curriculum.pk}/subjects/'},
+        {'name': collection.topic.subject.name, 'url': f'/flashcards/subjects/{collection.topic.subject.pk}/topics/'},
+        {'name': collection.topic.name, 'url': f'/flashcards/topics/{collection.topic.pk}/collections/'},
+        {'name': collection.title, 'url': f'/flashcards/collections/{collection.pk}/'},
+        {'name': 'Edit', 'url': None}
+    ]
+
     if request.method == 'POST':
         form = FlashcardCollectionForm(request.POST, instance=collection)
         if form.is_valid():
             form.save()
             messages.success(request, 'Collection updated successfully.')
-            return redirect('collection_list')
+            return redirect('collection_detail', pk=collection.pk)
     else:
         form = FlashcardCollectionForm(instance=collection)
     return render(request, 'flashcards/collections/form.html', {
         'form': form,
         'title': 'Edit Collection',
-        'topic': collection.topic
+        'topic': collection.topic,
+        'breadcrumbs': breadcrumbs
     })
 
 
@@ -71,7 +91,10 @@ def collection_delete(request, pk):
 
 @login_required
 def collection_detail(request, pk):
-    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    collection = get_object_or_404(
+        FlashcardCollection.objects.select_related('topic__subject__curriculum'),
+        pk=pk
+    )
 
     if request.method == 'POST':
         ids = request.POST.getlist('flashcards')
@@ -89,7 +112,18 @@ def collection_detail(request, pk):
             messages.info(request, 'No flashcards selected.')
         return redirect('collection_detail', pk=collection.pk)
 
-    return render(request, 'flashcards/collections/detail.html', {'collection': collection})
+    breadcrumbs = [
+        {'name': 'Curricula', 'url': '/flashcards/curricula/'},
+        {'name': collection.topic.subject.curriculum.name, 'url': f'/flashcards/curricula/{collection.topic.subject.curriculum.pk}/subjects/'},
+        {'name': collection.topic.subject.name, 'url': f'/flashcards/subjects/{collection.topic.subject.pk}/topics/'},
+        {'name': collection.topic.name, 'url': f'/flashcards/topics/{collection.topic.pk}/collections/'},
+        {'name': collection.title, 'url': None}
+    ]
+
+    return render(request, 'flashcards/collections/detail.html', {
+        'collection': collection,
+        'breadcrumbs': breadcrumbs
+    })
 
 
 @login_required

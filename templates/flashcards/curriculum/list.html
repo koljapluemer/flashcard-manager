@@ -9,157 +9,37 @@
 </div>
 
 {% if curricula %}
-    <div class="space-y-2">
-        {% for curriculum in curricula %}
-        <div class="collapse collapse-arrow bg-base-200">
-            <input type="checkbox" name="curriculum-{{ curriculum.id }}" />
-            <div class="collapse-title text-xl font-medium flex items-center justify-between pr-12">
-                <span>{{ curriculum.name }}</span>
-                <div class="flex gap-2 z-10">
-                    <a href="{% url 'subject_create' curriculum.id %}" class="btn btn-sm btn-ghost" onclick="event.stopPropagation()">+ Subject</a>
-                    <a href="{% url 'curriculum_edit' curriculum.id %}" class="btn btn-sm btn-ghost" onclick="event.stopPropagation()">Edit</a>
-                    <a href="{% url 'curriculum_delete' curriculum.id %}" class="btn btn-sm btn-ghost text-error" onclick="event.stopPropagation()">Delete</a>
-                </div>
-            </div>
-            <div class="collapse-content">
-                {% if curriculum.description %}
-                    <p class="text-sm opacity-70 mb-4">{{ curriculum.description }}</p>
-                {% endif %}
-
-                {% if curriculum.subjects.all %}
-                    <div class="ml-4 space-y-2">
-                        {% for subject in curriculum.subjects.all %}
-                        <div class="collapse collapse-arrow bg-base-300">
-                            <input type="checkbox" name="subject-{{ subject.id }}" />
-                            <div class="collapse-title font-medium flex items-center justify-between pr-12">
-                                <span>{{ subject.name }}</span>
-                                <div class="flex gap-2 z-10">
-                                    <a href="{% url 'topic_create' subject.id %}" class="btn btn-xs btn-ghost" onclick="event.stopPropagation()">+ Topic</a>
-                                    <a href="{% url 'subject_edit' subject.id %}" class="btn btn-xs btn-ghost" onclick="event.stopPropagation()">Edit</a>
-                                    <a href="{% url 'subject_delete' subject.id %}" class="btn btn-xs btn-ghost text-error" onclick="event.stopPropagation()">Delete</a>
-                                </div>
-                            </div>
-                            <div class="collapse-content">
-                                {% if subject.description %}
-                                    <p class="text-sm opacity-70 mb-4">{{ subject.description }}</p>
-                                {% endif %}
-
-                                {% if subject.topics.all %}
-                                    <div class="ml-4 space-y-2">
-                                        {% for topic in subject.topics.all %}
-                                        <div class="collapse collapse-arrow bg-base-100">
-                                            <input type="checkbox" name="topic-{{ topic.id }}" />
-                                            <div class="collapse-title text-sm font-medium flex items-center justify-between pr-12">
-                                                <span>{{ topic.name }}</span>
-                                                <div class="flex gap-2 z-10">
-                                                    <a href="{% url 'collection_create_for_topic' topic.id %}" class="btn btn-xs btn-ghost" onclick="event.stopPropagation()">+ Collection</a>
-                                                    <a href="{% url 'topic_edit' topic.id %}" class="btn btn-xs btn-ghost" onclick="event.stopPropagation()">Edit</a>
-                                                    <a href="{% url 'topic_delete' topic.id %}" class="btn btn-xs btn-ghost text-error" onclick="event.stopPropagation()">Delete</a>
-                                                </div>
-                                            </div>
-                                            <div class="collapse-content">
-                                                {% if topic.description %}
-                                                    <p class="text-xs opacity-70 mb-4">{{ topic.description }}</p>
-                                                {% endif %}
-
-                                                {% if topic.collections.all %}
-                                                    <div class="overflow-x-auto">
-                                                        <table class="table table-xs">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Title</th>
-                                                                    <th>Description</th>
-                                                                    <th>Flashcards</th>
-                                                                    <th>Actions</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {% for collection in topic.collections.all %}
-                                                                <tr>
-                                                                    <td>
-                                                                        <a href="{% url 'collection_detail' collection.id %}" class="link link-hover">{{ collection.title }}</a>
-                                                                    </td>
-                                                                    <td class="opacity-70">{{ collection.description|truncatewords:15 }}</td>
-                                                                    <td>{{ collection.flashcards.count }}</td>
-                                                                    <td>
-                                                                        <div class="flex gap-1">
-                                                                            <a href="{% url 'collection_detail' collection.id %}" class="btn btn-xs btn-ghost">View</a>
-                                                                            <a href="{% url 'collection_edit' collection.id %}" class="btn btn-xs btn-ghost">Edit</a>
-                                                                            <a href="{% url 'collection_delete' collection.id %}" class="btn btn-xs btn-ghost text-error">Delete</a>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                {% endfor %}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                {% else %}
-                                                    <p class="text-xs opacity-50">No collections yet</p>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    <p class="text-sm opacity-50 ml-4">No topics yet</p>
-                                {% endif %}
-                            </div>
+    <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for curriculum in curricula %}
+                <tr>
+                    <td>
+                        <a href="{% url 'curriculum_detail' curriculum.pk %}" class="link link-hover font-medium">{{ curriculum.name }}</a>
+                    </td>
+                    <td class="opacity-70">{{ curriculum.description|truncatewords:30 }}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{% url 'curriculum_detail' curriculum.pk %}" class="btn btn-xs btn-ghost">View</a>
+                            <a href="{% url 'curriculum_edit' curriculum.pk %}" class="btn btn-xs btn-ghost">Edit</a>
+                            <a href="{% url 'curriculum_delete' curriculum.pk %}" class="btn btn-xs btn-ghost text-error">Delete</a>
                         </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="text-sm opacity-50 ml-4">No subjects yet</p>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% else %}
     <div class="text-center py-12">
         <p class="text-lg opacity-60">No curricula yet. Create your first curriculum to get started.</p>
     </div>
 {% endif %}
-
-<script>
-(function() {
-    const STORAGE_KEY = 'curriculum-tree-state';
-
-    // Load state from localStorage
-    function loadState() {
-        try {
-            const state = localStorage.getItem(STORAGE_KEY);
-            return state ? JSON.parse(state) : {};
-        } catch (e) {
-            return {};
-        }
-    }
-
-    // Save state to localStorage
-    function saveState(state) {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        } catch (e) {
-            console.error('Failed to save collapse state:', e);
-        }
-    }
-
-    // Restore collapse state on page load
-    const state = loadState();
-    const checkboxes = document.querySelectorAll('.collapse input[type="checkbox"]');
-
-    checkboxes.forEach(checkbox => {
-        const name = checkbox.getAttribute('name');
-        if (name && state[name] !== undefined) {
-            checkbox.checked = state[name];
-        }
-
-        // Listen for changes and save to localStorage
-        checkbox.addEventListener('change', function() {
-            const currentState = loadState();
-            currentState[name] = this.checked;
-            saveState(currentState);
-        });
-    });
-})();
-</script>
 {% endblock %}

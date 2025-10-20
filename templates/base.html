@@ -10,23 +10,7 @@
 <body class="min-h-screen bg-base-100">
     {% include 'icons/sprite.svg' %}
     {% if user.is_authenticated %}
-    <div class="navbar bg-base-200">
-        <div class="navbar-start">
-            <a class="btn btn-ghost text-xl" href="/">Flashcard Manager</a>
-        </div>
-        <div class="navbar-center">
-            <ul class="menu menu-horizontal px-1">
-                <li><a href="{% url 'curriculum_list' %}">Curricula</a></li>
-                <li><a href="{% url 'collection_list' %}">Collections</a></li>
-            </ul>
-        </div>
-        <div class="navbar-end">
-            <form method="post" action="{% url 'logout' %}" class="inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-ghost">Logout</button>
-            </form>
-        </div>
-    </div>
+        {% include 'components/breadcrumbs.html' %}
     {% endif %}
 
     <main class="container mx-auto p-4">

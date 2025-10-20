@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ curriculum.name }} - Subjects{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <h1 class="text-3xl font-bold">{{ curriculum.name }}</h1>
+        {% if curriculum.description %}
+            <p class="text-sm opacity-70 mt-2">{{ curriculum.description }}</p>
+        {% endif %}
+    </div>
+    <a href="{% url 'subject_create' curriculum.pk %}" class="btn btn-primary">+ New Subject</a>
+</div>
+
+{% if subjects %}
+    <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Topics</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                <tr>
+                    <td>
+                        <a href="{% url 'subject_detail' subject.pk %}" class="link link-hover font-medium">{{ subject.name }}</a>
+                    </td>
+                    <td class="opacity-70">{{ subject.description|truncatewords:20 }}</td>
+                    <td>{{ subject.topics.count }}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{% url 'subject_detail' subject.pk %}" class="btn btn-xs btn-ghost">View</a>
+                            <a href="{% url 'subject_edit' subject.pk %}" class="btn btn-xs btn-ghost">Edit</a>
+                            <a href="{% url 'subject_delete' subject.pk %}" class="btn btn-xs btn-ghost text-error">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="text-center py-12">
+        <p class="text-lg opacity-60">No subjects yet. Create your first subject to get started.</p>
+    </div>
+{% endif %}
+{% endblock %}
