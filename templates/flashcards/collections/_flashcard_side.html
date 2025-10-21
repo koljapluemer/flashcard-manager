@@ -39,21 +39,6 @@
 {# Optional extra info box at bottom (separate grid row) #}
 {% if extra_html and extra_style and extra_style != 'none' %}
   <div class="extra-box extra-{{ extra_style }}">
-    <div class="extra-inner">
-      <div class="extra-icon-badge" aria-hidden="true">
-        {% if extra_style == 'tip' %}
-          <svg class="extra-icon"><use href="#icon-brain"></use></svg>
-        {% elif extra_style == 'warning' %}
-          <svg class="extra-icon"><use href="#icon-warning"></use></svg>
-        {% elif extra_style == 'check' %}
-          <svg class="extra-icon"><use href="#icon-check"></use></svg>
-        {% elif extra_style == 'see_also' %}
-          <svg class="extra-icon"><use href="#icon-compass"></use></svg>
-        {% elif extra_style == 'info' %}
-          <svg class="extra-icon"><use href="#icon-info"></use></svg>
-        {% endif %}
-      </div>
-      <div class="extra-content">{{ extra_html|safe }}</div>
-    </div>
+    <div class="extra-content">{{ extra_html|safe }}</div>
   </div>
 {% endif %}
