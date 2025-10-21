@@ -76,16 +76,17 @@
                             </tr>
                         <tr id="fc-{{ flashcard.id }}" class="hidden">
                             <td colspan="5">
-                                <div class="flashcard-theme grid grid-cols-1 md:grid-cols-2 gap-6"
-                                     style="--card-text-color: {{ collection.card_text_color }}; --card-bg-color: {{ collection.card_bg_color }}; --card-header-bg-color: {{ collection.header_bg_color }}; --card-header-text-color: {{ collection.header_text_color }};">
-                                    <div class="flashcard-box bg-base-200 rounded border border-base-300 shadow-md overflow-hidden">
-                                        <div class="flashcard">
-                                            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.front_layout image=flashcard.front_image content=flashcard.front extra_html=flashcard.front_extra extra_style=flashcard.front_extra_style %}
+                                <div class="flashcard-isolated">
+                                    <div class="flashcard-theme" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; --card-text-color: {{ collection.card_text_color }}; --card-bg-color: {{ collection.card_bg_color }}; --card-header-bg-color: {{ collection.header_bg_color }}; --card-header-text-color: {{ collection.header_text_color }};">
+                                        <div class="flashcard-box">
+                                            <div class="flashcard">
+                                                {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.front_layout image=flashcard.front_image content=flashcard.front extra_html=flashcard.front_extra extra_style=flashcard.front_extra_style %}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="flashcard-box bg-base-200 rounded border border-base-300 shadow-md overflow-hidden">
-                                        <div class="flashcard">
-                                            {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.back_layout image=flashcard.back_image content=flashcard.back extra_html=flashcard.back_extra extra_style=flashcard.back_extra_style %}
+                                        <div class="flashcard-box">
+                                            <div class="flashcard">
+                                                {% include 'flashcards/collections/_flashcard_side.html' with header_text=collection.header_text layout=flashcard.back_layout image=flashcard.back_image content=flashcard.back extra_html=flashcard.back_extra extra_style=flashcard.back_extra_style %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -109,6 +110,11 @@
     </div>
 </div>
 <style>
+    /* Disable Tailwind/DaisyUI for flashcard preview context only */
+    .flashcard-isolated * {
+        all: revert;
+    }
+
     /* Include shared flashcard styles for web preview */
     {% include 'flashcards/collections/_flashcard_styles.html' %}
     /* Container styling for preview display */
