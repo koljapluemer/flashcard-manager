@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from flashcards.models import User, Flashcard, FlashcardCollection
 
 
 @admin.register(User)
@@ -23,3 +23,18 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
+
+
+@admin.register(FlashcardCollection)
+class FlashcardCollectionAdmin(admin.ModelAdmin):
+    list_display = ['title', 'created_at', 'updated_at']
+    search_fields = ['title', 'description']
+    ordering = ['title']
+
+
+@admin.register(Flashcard)
+class FlashcardAdmin(admin.ModelAdmin):
+    list_display = ['front', 'collection', 'created_at']
+    list_filter = ['collection']
+    search_fields = ['front', 'back']
+    ordering = ['collection', 'id']

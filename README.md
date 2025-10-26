@@ -1,50 +1,51 @@
 # Flashcard Manager
 
-Internal flashcard management app for author team.
+Internal flashcard management REST API for author team.
 
 ## What it does
 
-- Create/edit flashcards with rich text (front/back)
+- Create/edit flashcards via REST API
 - Organize flashcards into collections
-- Bulk import via CSV upload
-- Export collections as business-card PDFs
-- Full audit history (soft-delete only)
-- Login required, no registration
+- Token-based authentication (email + password)
 
 ## Structure
 
 ```
-flashcards/                 # Main app (consolidated)
-├── models.py              # Flashcard + FlashcardCollection
-├── views/                 # Split into flashcard_views, collection_views, csv_upload
-├── forms.py               # Flashcard forms
-├── collection_forms.py    # Collection + CSV upload forms
-├── utils.py               # PDF generation (WeasyPrint)
-└── admin.py               # Admin interfaces
+flashcards/                    # Single consolidated app
+├── models/
+│   ├── user.py               # User model (email-based auth)
+│   └── flashcard.py          # Flashcard + FlashcardCollection
+├── serializers/
+│   ├── auth.py               # Email auth token serializer
+│   └── flashcard.py          # Flashcard serializers
+├── views/
+│   ├── auth.py               # Token authentication view
+│   └── flashcard.py          # Flashcard API viewsets
+├── admin.py                  # Admin for User + Flashcards
+└── migrations/
 
-templates/flashcards/      # All templates
-├── list.html, form.html   # Flashcard templates
-└── collections/           # Collection templates
-
-accounts/                  # Email+password auth only
+flashcard_manager/            # Django project settings
 ```
 
 ## Tech stack
 
 - Django 5.2 + Poetry
+- Django REST Framework
 - PostgreSQL (SQLite for dev)
-- django-summernote (rich text)
-- django-simple-history (audit trail)
-- WeasyPrint (PDF generation)
-- Tailwind + DaisyUI (via CDN)
+- Token authentication
 
-## URLs
+## API
+
+See [API.md](API.md) for complete API documentation.
+
+### Quick start
 
 ```
-/                          # Home (login required)
-/login/                    # Login
-/flashcards/               # Flashcard list
-/flashcards/collections/   # Collection list + CSV upload
+POST /api/token-auth/          # Get auth token (email + password)
+GET  /api/collections/         # List collections
+POST /api/collections/         # Create collection
+GET  /api/flashcards/          # List flashcards
+POST /api/flashcards/          # Create flashcard
 ```
 
 ## Run locally
@@ -52,16 +53,21 @@ accounts/                  # Email+password auth only
 ```bash
 poetry install
 poetry run python manage.py migrate
-poetry run python manage.py createsuperuser
+poetry run python manage.py createsuperuser  # Create user with email
 poetry run python manage.py runserver
 ```
 
-## CSV format
+## Authentication
 
-2 columns, no header:
-```
-What is 2+2?,4
-Capital of France,Paris
+Obtain a token:
+```bash
+curl -X POST http://localhost:8000/api/token-auth/ \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "yourpassword"}'
 ```
 
-Creates collection named after filename.
+Use the token in subsequent requests:
+```bash
+curl http://localhost:8000/api/collections/ \
+  -H "Authorization: Token your-token-here"
+```

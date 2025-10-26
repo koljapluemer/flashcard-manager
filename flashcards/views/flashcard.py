@@ -1,7 +1,6 @@
 from rest_framework import viewsets
-
 from flashcards.models import Flashcard, FlashcardCollection
-from .serializers import FlashcardCollectionSerializer, FlashcardSerializer
+from flashcards.serializers import FlashcardCollectionSerializer, FlashcardSerializer
 
 
 class FlashcardCollectionViewSet(viewsets.ModelViewSet):

@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from flashcards.models import Flashcard, FlashcardCollection
 
 
