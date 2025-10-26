@@ -4,7 +4,7 @@ The Flashcard Manager project now exposes a small REST API for managing flashcar
 
 ## Authentication
 
-Obtain a token by posting username/password credentials to:
+Obtain a token by posting email/password credentials to:
 
 - `POST /api/token-auth/`
 
@@ -12,7 +12,7 @@ Request body:
 
 ```json
 {
-  "username": "user@example.com",
+  "email": "user@example.com",
   "password": "your-password"
 }
 ```
